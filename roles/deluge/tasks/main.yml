@@ -10,12 +10,12 @@
     recurse: yes
     state: directory
 
-- docker_container:
+- community.docker.docker_container:
     name: deluge
     image: linuxserver/deluge
     pull: true
     state: started
-    restart: yes
+    recreate: yes
     restart_policy: always
     volumes:
       - "{{ DOCKER.host_path }}/deluge:/config"

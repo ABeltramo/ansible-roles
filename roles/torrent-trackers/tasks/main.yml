@@ -1,4 +1,4 @@
-- docker_container:
+- community.docker.docker_container:
     name: sonarr
     image: linuxserver/sonarr
     pull: true
@@ -20,7 +20,7 @@
     networks:
       - name: "{{ DOCKER.net.traefik }}"
 
-- docker_container:
+- community.docker.docker_container:
     name: radarr
     image: linuxserver/radarr
     state: started
@@ -41,7 +41,7 @@
     networks:
       - name: "{{ DOCKER.net.traefik }}"
 
-- docker_container:
+- community.docker.docker_container:
     name: bazarr
     image: linuxserver/bazarr
     state: started
@@ -62,7 +62,7 @@
     networks:
       - name: "{{ DOCKER.net.traefik }}"
 
-#- docker_container:
+#- community.docker.docker_container:
 #    name: lidarr
 #    image: linuxserver/lidarr
 #    state: started

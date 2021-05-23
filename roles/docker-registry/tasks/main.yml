@@ -11,7 +11,7 @@
 
 
 - name: Start container Docker registry
-  docker_container:
+  community.docker.docker_container:
     name: docker-registry
     image: "registry:2"
     state: started

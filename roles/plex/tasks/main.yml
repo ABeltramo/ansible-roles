@@ -28,12 +28,12 @@
     mode: '0755'
   become: no
 
-- docker_container:
+- community.docker.docker_container:
     name: plex
     image: linuxserver/plex
     pull: true
     state: started
-    restart: yes
+    recreate: yes
     restart_policy: always
     ports:
       - "32400:32400/tcp"

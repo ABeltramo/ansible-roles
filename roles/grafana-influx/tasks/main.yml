@@ -3,7 +3,7 @@
     name: "{{ DOCKER.net.dbms }}"
 
 - name: Start container InfluxDB
-  docker_container:
+  community.docker.docker_container:
     name: influxdb
     image: "influxdb:1.8"
     state: started
@@ -25,12 +25,12 @@
 
 
 - name: Start container Grafana
-  docker_container:
+  community.docker.docker_container:
     name: grafana
     image: "grafana/grafana"
     state: started
     recreate: yes
-    restart: yes
+    recreate: yes
     pull: yes
     restart_policy: always
     env:

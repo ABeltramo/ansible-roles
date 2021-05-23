@@ -1,9 +1,9 @@
-- docker_container:
+- community.docker.docker_container:
     name: nordVPN
     image: azinchen/nordvpn
     pull: true
     state: started
-    restart: no
+    recreate: no
     restart_policy: always
     ports:
       - "51413:51413"

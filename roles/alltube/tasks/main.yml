@@ -10,12 +10,12 @@
     dest: "{{ DOCKER.host_path }}/alltube/config.yml"
 
 - name: "Start alltube"
-  docker_container:
+  community.docker.docker_container:
     name: alltube
     image: rudloff/alltube
     pull: true
     state: started
-    restart: yes
+    recreate: yes
     restart_policy: always
     networks:
       - name: "{{ DOCKER.net.traefik }}"

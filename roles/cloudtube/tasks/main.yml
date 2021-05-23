@@ -16,12 +16,12 @@
     dest: "{{ DOCKER.host_path }}/cloudtube/configuration.py"
 
 - name: "Start cloudtube-newleaf"
-  docker_container:
+  community.docker.docker_container:
     name: cloudtube-newleaf
     image: abeltramo/newleaf:latest
     pull: true
     state: started
-    restart: yes
+    recreate: yes
     restart_policy: always
     volumes:
       - "{{ DOCKER.host_path }}/cloudtube/configuration.py:/workdir/configuration.py"
@@ -30,12 +30,12 @@
     purge_networks: yes
 
 - name: "Start cloudtube"
-  docker_container:
+  community.docker.docker_container:
     name: cloudtube
     image: abeltramo/cloudtube:latest
     pull: true
     state: started
-    restart: yes
+    recreate: yes
     restart_policy: always
     networks:
       - name: "{{ DOCKER.net.traefik }}"

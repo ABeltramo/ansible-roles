@@ -14,12 +14,12 @@
   become: n
 
 - name: "Start adminer"
-  docker_container:
+  community.docker.docker_container:
     name: adminer
     image: adminer
     pull: true
     state: started
-    restart: yes
+    recreate: yes
     restart_policy: always
     purge_networks: yes
     env:

@@ -4,12 +4,12 @@
     force: no
 
 - name: "Start portainer"
-  docker_container:
+  community.docker.docker_container:
     name: portainer
     image: portainer/portainer-ce
     pull: true
     state: started
-    restart: yes
+    recreate: yes
     restart_policy: always
     command: -H unix:///var/run/docker.sock
     ports:

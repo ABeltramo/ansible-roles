@@ -1,9 +1,9 @@
-- docker_container:
+- community.docker.docker_container:
     name: wiki-js
     image: requarks/wiki:2
     pull: true
     state: started
-    restart: yes
+    recreate: yes
     restart_policy: always
     env:
       DB_TYPE: mysql

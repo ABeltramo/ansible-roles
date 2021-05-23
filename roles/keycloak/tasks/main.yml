@@ -1,8 +1,8 @@
-- docker_container:
+- community.docker.docker_container:
     name: keycloak
     state: started
     image: jboss/keycloak:6.0.1
-    restart: yes
+    recreate: yes
     restart_policy: always
     command: [ "-b", "0.0.0.0", "-Dkeycloak.profile.feature.docker=enabled" ]
     env:

@@ -1,9 +1,10 @@
-- docker_container:
+- name: "Start cloudflare-ddns container with healthchecks"
+  community.docker.docker_container:
     name: cloudflare-ddns
     image: abeltramo/cloudflare-ddns:latest
     pull: true
     state: started
-    restart: yes
+    recreate: yes
     restart_policy: always
     env:
       AUTH_EMAIL: "{{ cloudflare.auth_email }}"
@@ -17,12 +18,13 @@
     purge_networks: yes
   when: HEALTHCHECK is defined
 
-- docker_container:
+- name: "Start cloudflare-ddns container without healthchecks"
+  community.docker.docker_container:
     name: cloudflare-ddns
     image: abeltramo/cloudflare-ddns:latest
     pull: true
     state: started
-    restart: yes
+    recreate: yes
     restart_policy: always
     env:
       AUTH_EMAIL: "{{ cloudflare.auth_email }}"
