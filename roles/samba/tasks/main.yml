@@ -1,0 +1,21 @@
+- name: "Update repositories and install samba"
+  apt:
+    name:
+      - samba
+      - samba-common
+    update_cache: yes
+    autoclean: yes
+    autoremove: yes
+
+- name: "Copy samba config"
+  template:
+    src: samba.conf
+    dest: /etc/samba/smb.conf
+    mode: u=rw,g=rw,o=rw
+
+- name: "Restart smbd daemon"
+  service:
+    name: smbd
+    state: restarted
+
+#### REMEMBER TO CALL smbpasswd -a user

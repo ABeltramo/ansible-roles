@@ -1,0 +1,19 @@
+- name: "Start Heimdall"
+  docker_container:
+    name: heimdall
+    image: linuxserver/heimdall
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: always
+    volumes:
+      - "{{ DOCKER.host_path }}/heimdall:/config"
+    env:
+      TZ: 'Europe/London'
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+    purge_networks: yes
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "80"
+      traefik.enable: "true"

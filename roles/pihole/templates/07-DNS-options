@@ -1,0 +1,2 @@
+addn-hosts=/etc/pihole/lan.list
+dhcp-option=option:dns-server,{{server_address}},{{dns_alternative}}

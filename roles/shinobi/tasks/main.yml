@@ -1,0 +1,60 @@
+- name: "Create build folder"
+  file:
+    path: /tmp/shinobi-docker
+    state: directory
+
+- name: "Copy docker-entrypoint.sh"
+  copy:
+    src: docker-entrypoint.sh
+    dest: /tmp/shinobi-docker/docker-entrypoint.sh
+    mode: u=rw,g=rw,o=rw
+
+- name: "Copy Dockerfile"
+  copy:
+    src: Dockerfile
+    dest: /tmp/shinobi-docker/Dockerfile
+    mode: u=rw,g=rw,o=rw
+
+- name: "Copy conf.json"
+  template:
+    src: conf.json
+    dest: /tmp/shinobi-docker
+    mode: u=rw,g=rw,o=rw
+
+- name: "Copy pm2Shinobi.yml"
+  copy:
+    src: pm2Shinobi.yml
+    dest: /tmp/shinobi-docker
+    mode: u=rw,g=rw,o=rw
+
+- name: "Build Docker image abeltramo/shinobi"
+  docker_image:
+    name: abeltramo/shinobi
+    build:
+      path: /tmp/shinobi-docker/
+    state: present
+    source: build
+
+- docker_container:
+    name: shinobi
+    image: abeltramo/shinobi
+    pull: false
+    state: started
+    restart: yes
+    restart_policy: always
+    env:
+      TZ: "Europe/London"
+      ADMIN_USER: "{{ admin_user }}"
+      ADMIN_PASSWORD: "{{ admin_password }}"
+      MYSQL_USER: "{{ sql_user }}"
+      MYSQL_PASSWORD: "{{ sql_password }}"
+      MYSQL_DATABASE: "{{ sql_db }}"
+      MYSQL_HOST: "{{ sql_host }}"
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "8080"
+      traefik.enable: "true"
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+      - name: "{{ DOCKER.net.dbms }}"
+    purge_networks: yes

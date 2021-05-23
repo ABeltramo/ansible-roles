@@ -1,0 +1,23 @@
+- docker_container:
+    name: firefox-sync
+    image:  mozilla/syncserver:latest
+    state: started
+    pull: true
+    restart: yes
+    restart_policy: always
+    env:
+      SYNCSERVER_PUBLIC_URL: "{{ public_url }}"
+      SYNCSERVER_SQLURI: "mysql+pymysql://{{ SQL.user }}:{{ SQL.password }}@{{ SQL.host }}/{{ SQL.db }}"
+      SYNCSERVER_SECRET: "{{ secret }}"
+      SYNCSERVER_FORCE_WSGI_ENVIRON: "true"
+      SYNCSERVER_BATCH_UPLOAD_ENABLED: "true"
+      SYNCSERVER_ALLOW_NEW_USERS: "false" # Enable this in case of a new installation
+      # SYNCSERVER_DEBUG_ENABLED: "true"
+    networks:
+      - name: "{{ DOCKER.net.dbms }}"
+      - name: "{{ DOCKER.net.traefik }}"
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "5000"
+      traefik.enable: "true"
+    purge_networks: yes

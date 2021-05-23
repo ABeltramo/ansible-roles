@@ -1,0 +1,34 @@
+- name: Ensure healthchecks folder exists
+  file:
+    path: "{{ DOCKER.host_path }}/healthchecks/"
+    recurse: yes
+    state: directory
+
+- name: Copy python config file
+  template:
+    src: "settings.py"
+    dest: "{{ DOCKER.host_path }}/healthchecks/local_settings.py"
+
+- docker_container:
+    name: healthchecks
+    image: linuxserver/healthchecks
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: always
+    volumes:
+      - "{{ DOCKER.host_path }}/healthchecks:/config/"
+    env:
+      TZ: "Europe/London"
+      PGID: "1000"
+      PUID: "1000"
+      SUPERUSER_EMAIL: "{{ admin_email }}"
+      SUPERUSER_PASSWORD: "{{ admin_password }}"
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "8000"
+      traefik.enable: "true"
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+      - name: "{{ DOCKER.net.dbms }}"
+    purge_networks: yes

@@ -1,0 +1,32 @@
+{
+  "port": 8080,
+  "addStorage": [
+    {
+      "name": "second",
+      "path": "__DIR__/videos2"
+    }
+  ],
+  "db": {
+    "host": "{{ sql_host }}",
+    "user": "{{ sql_user }}",
+    "password": "{{ sql_password }}",
+    "database": "{{ sql_db }}",
+    "port": {{ sql_port }}
+  },
+  "mail": {
+    "service": "gmail",
+    "auth": {
+      "user": "your_email@gmail.com",
+      "pass": "your_password_or_app_specific_password"
+    }
+  },
+  "cron": {
+    "key": "[REMOVED]"
+  },
+  "pluginKeys": {
+    "Motion": "[REMOVED]",
+    "OpenCV": "[REMOVED]",
+    "OpenALPR": "[REMOVED]"
+  },
+  "productType": "CE"
+}

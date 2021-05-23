@@ -1,0 +1,25 @@
+- docker_container:
+    name: watchtower
+    image: containrrr/watchtower
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    env:
+      WATCHTOWER_NOTIFICATIONS: "email"
+      WATCHTOWER_NOTIFICATION_EMAIL_FROM: "{{ machine_name }}@{{ email_from }}"
+      WATCHTOWER_NOTIFICATION_EMAIL_TO: "{{ email_to }}"
+      WATCHTOWER_NOTIFICATION_EMAIL_SERVER: "{{ mail.server }}"
+      WATCHTOWER_NOTIFICATION_EMAIL_SERVER_USER: "{{ mail.user }}"
+      WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PASSWORD: "{{ mail.password }}"
+      WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PORT: "{{ mail.port }}"
+      WATCHTOWER_NOTIFICATION_EMAIL_SUBJECTTAG: "{{ machine_name }}"
+      WATCHTOWER_NOTIFICATION_EMAIL_DELAY: "2"
+      WATCHTOWER_NO_STARTUP_MESSAGE: "true"
+      WATCHTOWER_INCLUDE_STOPPED: "1"       # Include stopped containers
+      WATCHTOWER_CLEANUP: "1"               # Delete unused image
+      #                     seconds           minutes           h D M d
+      WATCHTOWER_SCHEDULE: "{{ 59 | random }} {{ 59 | random }} 1 * * 6" # Run on Saturday morning at 1 AM
+      WATCHTOWER_DEBUG: "true"

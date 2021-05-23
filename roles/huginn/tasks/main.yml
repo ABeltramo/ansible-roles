@@ -1,0 +1,22 @@
+- name: "Start Huginn"
+  docker_container:
+    name: huginn
+    image: huginn/huginn
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: on-failure
+    restart_retries: 2
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+      - name: "{{ DOCKER.net.dbms }}"
+    purge_networks: yes
+    env:
+      MYSQL_PORT_3306_TCP_ADDR: mysql
+      HUGINN_DATABASE_NAME: huginn
+      HUGINN_DATABASE_USERNAME: huginn
+      HUGINN_DATABASE_PASSWORD: huginn
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "3000"
+      traefik.enable: "true"

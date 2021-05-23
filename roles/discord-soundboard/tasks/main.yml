@@ -1,0 +1,31 @@
+- name: Ensure discord-sb folder exists
+  file:
+    path: "{{ DOCKER.host_path }}/discord-sb/"
+    recurse: yes
+    state: directory
+
+- name: Ensure db.json exists
+  file:
+    path: "{{ DOCKER.host_path }}/discord-sb/db.json"
+    state: touch
+
+- name: Copy config.js file
+  template:
+    src: "config.json"
+    dest: "{{ DOCKER.host_path }}/discord-sb/config.json"
+
+- name: "Start Discord sound board"
+  docker_container:
+    name: discord-sb
+    image: abeltramo/discord-soundbot
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: always
+    networks:
+      - name: "{{ DOCKER.net.caddy }}"
+    purge_networks: yes
+    volumes:
+      - "{{ DOCKER.host_path }}/discord-sb/sounds:/app/sounds"
+      - "{{ DOCKER.host_path }}/discord-sb/db.json:/app/db.json"
+      - "{{ DOCKER.host_path }}/discord-sb/config.json:/app/config/config.json"

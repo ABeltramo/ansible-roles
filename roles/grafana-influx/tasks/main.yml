@@ -1,0 +1,65 @@
+- name: "Create DB network"
+  docker_network:
+    name: "{{ DOCKER.net.dbms }}"
+
+- name: Start container InfluxDB
+  docker_container:
+    name: influxdb
+    image: "influxdb:1.8"
+    state: started
+    recreate: no
+    pull: yes
+    restart_policy: always
+    ports:
+      - "8086:8086"
+    volumes:
+      - "{{ DOCKER.host_path }}/influxdb:/var/lib/influxdb"
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+      - name: "{{ DOCKER.net.dbms }}"
+    purge_networks: yes
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "8086"
+      traefik.enable: "true"
+
+
+- name: Start container Grafana
+  docker_container:
+    name: grafana
+    image: "grafana/grafana"
+    state: started
+    recreate: yes
+    restart: yes
+    pull: yes
+    restart_policy: always
+    env:
+      GF_SECURITY_ADMIN_PASSWORD: "#H!Q>(?)RLb7dmr:"
+      # Email
+      GF_SMTP_ENABLED: "true"
+      GF_SMTP_HOST: "{{ mail.server }}:{{ mail.port }}"
+      GF_SMTP_USER: "{{ mail.user }}"
+      GF_SMTP_PASSWORD: "{{ mail.password }}"
+      GF_SMTP_FROM_ADDRESS: "{{ mail_from }}"
+      # Database storage
+      GF_DATABASE_TYPE: "mysql"
+      GF_DATABASE_HOST: "{{ SQL.host }}:{{ SQL.port }}"
+      GF_DATABASE_NAME: "{{ SQL.db }}"
+      GF_DATABASE_USER: "{{ SQL.user }}"
+      GF_DATABASE_PASSWORD: "{{ SQL.password }}"
+      # others
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_LOG_MODE: "console"
+    user: "0"
+    volumes:
+      - "{{ DOCKER.host_path }}/grafana/grafana.db:/var/lib/grafana/grafana.db"
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+      - name: "{{ DOCKER.net.dbms }}"
+    purge_networks: yes
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "3000"
+      traefik.enable: "true"

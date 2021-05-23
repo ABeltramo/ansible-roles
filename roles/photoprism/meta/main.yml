@@ -1,0 +1,4 @@
+---
+dependencies:
+    - role: nfs-shares
+    - role: mariadb-create-db-user

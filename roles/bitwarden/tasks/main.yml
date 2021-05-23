@@ -1,0 +1,19 @@
+- name: "Start Bitwarden"
+  docker_container:
+    name: bitwardenrs
+    image: bitwardenrs/server
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: always
+    volumes:
+      - "{{ DOCKER.host_path }}/bitwarden:/data/"
+    env:
+      ADMIN_TOKEN: "{{ admin_token }}"
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "80"
+      traefik.enable: "true"
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+    purge_networks: yes

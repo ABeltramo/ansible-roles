@@ -1,0 +1,41 @@
+#- name: Git checkout projector-docker
+#  git:
+#    repo: 'https://github.com/JetBrains/projector-docker.git'
+#    dest: "{{ DOCKER.host_path }}/intellij-projector/projector-docker"
+#    version: "HEAD"
+#
+#- name: Git checkout projector-server
+#  git:
+#    repo: 'https://github.com/JetBrains/projector-server.git'
+#    dest: "{{ DOCKER.host_path }}/intellij-projector/projector-server"
+#    version: "HEAD"
+#
+#
+#- name: Execute build-container.sh
+#  command: sh ./build-container.sh projector-idea-c https://download.jetbrains.com/idea/ideaIU-2020.2.tar.gz
+#  become: true
+#  args:
+#    chdir: "{{ DOCKER.host_path }}/intellij-projector/projector-docker"
+
+
+- name: "Start intellij"
+  docker_container:
+    name: intellij-projector
+    image: projector-idea-c
+    pull: false
+    state: started
+    restart: no
+    restart_policy: on-failure
+    restart_retries: 2
+    command: bash -c "./run.sh"
+    ports:
+      - 8887:8887
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+    volumes:
+      - "{{ DOCKER.host_path }}/intellij-projector/projects:/projects"
+    purge_networks: yes
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "8887"
+      traefik.enable: "true"

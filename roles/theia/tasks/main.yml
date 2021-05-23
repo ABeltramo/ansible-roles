@@ -1,0 +1,21 @@
+- docker_volume:
+    name: theia-project
+    state: present
+    force: no
+
+- name: "Start Theia"
+  docker_container:
+    name: theia
+    image: theiaide/theia-full
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: on-failure
+    restart_retries: 1
+    env:
+      ACME_AGREE: "true"
+    volumes:
+      - theia-project:/home/project:cached
+    networks:
+      - name: "{{ DOCKER.net.caddy }}"
+    purge_networks: yes

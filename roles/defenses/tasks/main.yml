@@ -1,0 +1,19 @@
+- name: "Copy sshd_config"
+  copy:
+    src: sshd_config
+    dest: /etc/ssh/sshd_config
+    mode: '644'
+
+- name: "Restart sshd daemon"
+  service:
+    name: sshd
+    state: restarted
+
+- name: "Copy sysctl hardened conf"
+  copy:
+    src: sysctl.conf
+    dest: /etc/sysctl.d/80-lynis.conf
+    mode: '644'
+
+- name: "Enable sysctl config"
+  command: sysctl --system

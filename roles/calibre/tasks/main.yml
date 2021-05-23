@@ -1,0 +1,43 @@
+- docker_container:
+    name: calibre
+    image: linuxserver/calibre
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: always
+    volumes:
+      - "{{ DOCKER.host_path }}/calibre/db:/config"
+      - "{{ books_folder }}:/books"
+    env:
+      TZ: "Europe/London"
+      PGID: "0"
+      PUID: "0"
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.calibre_url }}"
+      traefik.port: "8080"
+      traefik.enable: "true"
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+    purge_networks: yes
+
+- docker_container:
+    name: calibre-web
+    image: linuxserver/calibre-web
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: always
+    volumes:
+      - "{{ DOCKER.host_path }}/calibre/config:/config"
+      - "{{ DOCKER.host_path }}/calibre/db:/db"
+      - "{{ books_folder }}:/books"
+    env:
+      TZ: "Europe/London"
+      DOCKER_MODS: "linuxserver/calibre-web:calibre"
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.calibre_web_url }}"
+      traefik.port: "8083"
+      traefik.enable: "false"
+    purge_networks: yes
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"

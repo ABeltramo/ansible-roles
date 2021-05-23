@@ -1,0 +1,32 @@
+- name: "Install AWS CLI"
+  pip:
+    name: [awscli]
+
+- name: "Create AWS credentials folder"
+  file:
+    path: /root/.aws/
+    state: directory
+
+- name: "Copy AWS credentials"
+  copy:
+    src: aws-credentials
+    dest: /root/.aws/credentials
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- name: "Copy AWS config"
+  copy:
+    src: aws-credentials
+    dest: /root/.aws/config
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- name: "Copy awsupdate.sh"
+  template:
+    src: awsupdate.sh
+    dest: /etc/cron.hourly/awsupdate
+    owner: root
+    group: root
+    mode: a+x

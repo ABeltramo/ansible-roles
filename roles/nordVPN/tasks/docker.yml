@@ -1,0 +1,29 @@
+- docker_container:
+    name: nordVPN
+    image: azinchen/nordvpn
+    pull: true
+    state: started
+    restart: no
+    restart_policy: always
+    ports:
+      - "51413:51413"
+      - "9117:9117"
+      - "8989:8989"
+      - "7878:7878"
+      - "8686:8686"
+      - "9091:9091"
+      - "8112:8112"
+    capabilities:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    env:
+      USER: "{{ nordVPN.user }}"
+      PASS: "{{ nordVPN.pass }}"
+      CATEGORY: P2P
+      OPENVPN_OPTS: "--mssfix 1452 --mute-replay-warnings"
+    networks:
+      - name: "traefik-local"
+    labels:
+      com.centurylinklabs.watchtower.enable: "false" # Auto update cause issues with other containers
+    purge_networks: "yes"

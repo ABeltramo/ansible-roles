@@ -1,0 +1,37 @@
+<?php
+$CONFIG = array(
+    'memcache.local' => '\\OC\\Memcache\\APCu',
+    'memcache.distributed' => '\OC\Memcache\Redis',
+    'memcache.locking' => '\OC\Memcache\Redis',
+    'redis' => array(
+        'host' => '{{ redis_url }}',
+        'port' => 6379,
+    ),
+    'datadirectory' => '{{ nextcloud_data }}',
+    'instanceid' => 'oc5smchsv2g0',
+    'passwordsalt' => '{{ salt }}',
+    'secret' => '{{ secret }}',
+    'trusted_domains' =>
+        array(
+            0 => '{{ public_host }}',
+        ),
+    'dbtype' => 'mysql',
+    //'htaccess.RewriteBase' => '/',
+    'dbname' => '{{ SQL.db }}',
+    'dbhost' => '{{ SQL.host }}',
+    'dbport' => '',
+    'dbtableprefix' => 'oc_',
+    'mysql.utf8mb4' => true,
+    'dbuser' => '{{ SQL.user }}',
+    'dbpassword' => '{{ SQL.password }}',
+    'installed' => true,
+    "log_type" => "file",
+    "logfile" => "/var/log/nextcloud.log",
+    "loglevel" => 2,
+    'logtimezone' => 'Europe/London',
+    'default_phone_region' => 'IT',
+    'overwritehost'     => '{{ public_host }}',
+    'overwriteprotocol' => 'https',
+    'overwrite.cli.url' => 'https://{{ public_host }}/',
+    'overwritewebroot'  => '/',
+);

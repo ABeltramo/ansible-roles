@@ -1,0 +1,48 @@
+- name: "Create Torrent folder"
+  file:
+    path: /mnt/data/torrent/complete/
+    state: directory
+
+- name: "Create Torrent folder"
+  file:
+    path: /mnt/data/torrent/incomplete/
+    state: directory
+
+- name: "Stop transmission before changing configs"
+  docker_container:
+    name: transmission
+    image: linuxserver/transmission
+    pull: true
+    state: stopped
+
+- name: "Create transmission config folder"
+  file:
+    path: "{{ DOCKER.host_path }}/transmission/config"
+    state: directory
+
+- name: "Set Transmission config.json"
+  copy:
+    src: transmission-minuto.json
+    dest: "{{ DOCKER.host_path }}/transmission/config/settings.json"
+
+- docker_container:
+    name: transmission
+    image: linuxserver/transmission
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: always
+    volumes:
+      - "{{ DOCKER.host_path }}/transmission/config:/config"
+      - "{{ media_folder }}/torrent:/downloads"
+    labels:
+      traefik.backed: "nordVPN"
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "9091"
+      traefik.enable: "true"
+    env:
+      TZ: 'Europe/London'
+      PGID: "1000"
+      PUID: "1000"
+    network_mode: "container:nordVPN"
+    purge_networks: yes

@@ -1,0 +1,13 @@
+- name: "Start redis"
+  docker_container:
+    name: redis
+    image: redis:alpine
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: always
+    published_ports:
+      - "6379:6379"
+    networks:
+      - name: "{{ DOCKER.net.dbms }}"
+    purge_networks: yes

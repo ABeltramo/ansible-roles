@@ -1,0 +1,51 @@
+- name: ensure neolink folder exists
+  file:
+    path: "{{ DOCKER.host_path }}/neolink/"
+    recurse: yes
+    state: directory
+
+- name: "Set neolink.toml"
+  template:
+    src: neolink.toml
+    dest: "{{ DOCKER.host_path }}/neolink/neolink.toml"
+    owner: "1000"
+    group: "1000"
+    mode: u=rw,g=r,o=r
+
+- name: "Start Neolink"
+  docker_container:
+    name: neolink
+    image: thirtythreeforty/neolink:latest
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: always
+    ports:
+      - 8554:8554
+    volumes:
+      - "{{ DOCKER.host_path }}/neolink/neolink.toml:/etc/neolink.toml"
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: ""
+      traefik.enable: "true"
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+    purge_networks: yes
+
+- name: "Start Homebridge"
+  docker_container:
+    name: homebridge
+    image: oznu/homebridge:latest
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: always
+    volumes:
+      - "{{ DOCKER.host_path }}/homebridge:/homebridge"
+    env:
+      PGID: "1000"
+      PUID: "1000"
+      HOMEBRIDGE_CONFIG_UI: "1"
+      HOMEBRIDGE_CONFIG_UI_PORT: "8581"
+      TZ: 'Europe/London'
+    network_mode: "host"

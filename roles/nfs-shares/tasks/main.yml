@@ -1,0 +1,37 @@
+- name: Mount disks
+  mount:
+    path: "{{ item.path }}"
+    src: "UUID={{ item.uuid }}"
+    fstype: "{{ item.fstype }}"
+    state: mounted
+  with_items: "{{ mount_disks }}"
+  when: mount_disks is defined
+
+- name: "Install nfs-common"
+  apt:
+    name: [ nfs-common ]
+    update_cache: yes
+  when: host_nfs_shares is defined
+
+- name: Mount share
+  mount:
+    path: "{{ item.path }}"
+    src: "{{ item.name }}"
+    fstype: nfs
+    opts: rw,async,hard,intr,noexec
+    state: mounted
+  with_items: "{{ host_nfs_shares }}"
+  when: host_nfs_shares is defined
+
+- name: "Creating docker volumes"
+  docker_volume:
+    name: "{{ item.name }}"
+    state: present
+    recreate: never
+    driver: local
+    driver_options:
+      type: nfs
+      o: "addr={{ item.addr }},rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14"
+      device: "{{ item.device }}"
+  with_items: "{{ docker_nfs_shares }}"
+  when: docker_nfs_shares is defined

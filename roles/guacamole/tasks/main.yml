@@ -1,0 +1,44 @@
+- name: "Compose Guacamole"
+  docker_compose:
+    project_name: guacamole
+    definition:
+      version: "3"
+      services:
+        guacamole:
+          image: guacamole/guacamole:latest
+          restart: unless-stopped
+          ports:
+            - "8989:8080"
+          environment:
+            MYSQL_HOSTNAME: "{{ SQL.host }}"
+            MYSQL_DATABASE: "{{ SQL.db }}"
+            MYSQL_PORT: "{{ SQL.port }}"
+            MYSQL_USER: "{{ SQL.user }}"
+            MYSQL_PASSWORD: "{{ SQL.password }}"
+            GUACAMOLE_HOME: "/data"
+            GUACD_HOSTNAME: "guacd"
+          volumes:
+            - "{{ DOCKER.host_path }}/guacamole:/data"
+          depends_on:
+            - guacd
+          networks:
+            traefik-local: {}
+            DBMS: {}
+          labels:
+            traefik.enable: "true"
+            traefik.frontend.rule: "Host: {{ traefik.url }}"
+            traefik.port: "8080"
+
+        guacd:
+          image: guacamole/guacd
+          restart: unless-stopped
+          networks:
+            traefik-local:
+              aliases:
+                - guacd
+
+      networks:
+        DBMS:
+          external: true
+        traefik-local:
+          external: true

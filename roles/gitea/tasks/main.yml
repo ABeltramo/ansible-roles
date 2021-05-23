@@ -1,0 +1,27 @@
+- name: "Copy Caddy config"
+  copy:
+    src: gitea-conf.ini
+    dest: ~/gitea/gitea/conf/app.ini
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- docker_container:
+    name: gitea
+    image: gitea/gitea:1.10.0
+    state: started
+    pull: true
+    restart: yes
+    restart_policy: always
+    volumes:
+      - ~/gitea:/data
+    env:
+      DB_TYPE: mysql
+      DB_HOST: mysql:3306
+      DB_NAME: gitea
+      DB_USER: gitea
+      DB_PASSWD: gitea
+    networks:
+      - name: "{{ DOCKER.net.dbms }}"
+      - name: "{{ DOCKER.net.caddy }}"
+    purge_networks: yes

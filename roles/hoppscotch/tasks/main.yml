@@ -1,0 +1,16 @@
+- name: "Start hoppscotch"
+  docker_container:
+    name: hoppscotch
+    image: hoppscotch/hoppscotch
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: always
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+    purge_networks: yes
+    command: npm run start
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "3000"
+      traefik.enable: "true"
