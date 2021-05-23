@@ -1,0 +1,37 @@
+- name: ensure airsonic/data exists
+  file:
+    path: "{{ DOCKER.host_path }}/soundbot/data/"
+    recurse: yes
+    state: directory
+
+- name: Start soundbot
+  docker_container:
+    name: soundbot
+    image: "abeltramo/soundbot-gui"
+    state: started
+    recreate: yes
+    pull: yes
+    restart_policy: always
+    env:
+      OAUTH_KEY: "{{ oauth_key }}"
+      OAUTH_SECRET: "{{ oauth_secret }}"
+      BOT_TOKEN: "{{ bot_token }}"
+      SESSION_SECRET: "{{ session_secret }}"
+      ORIGIN: "{{ origin }}"
+      DB_CLIENT: "mysql2"
+      DB_MYSQL_HOST: "{{ SQL.host }}"
+      DB_MYSQL_USER: "{{ SQL.user }}"
+      DB_MYSQL_PASSWORD: "{{ SQL.password }}"
+      DB_MYSQL_DATABASE: "{{ SQL.db }}"
+      LOG_LEVEL: "debug"
+      COOKIE_DURATION_MINUTES: "43200" # 30 * 24 * 60 --> a Month
+    volumes:
+      - "{{ DOCKER.host_path }}/soundbot/data/:/app/data"
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "3000"
+      traefik.enable: "true"
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+      - name: "{{ DOCKER.net.dbms }}"
+    purge_networks: yes

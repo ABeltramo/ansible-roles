@@ -1,0 +1,49 @@
+- name: Ensure cloudtube folder exists
+  file:
+    path: "{{ DOCKER.host_path }}/cloudtube/db"
+    recurse: yes
+    state: directory
+
+- name: Copy cloudtube config file
+  template:
+    src: "config.js"
+    dest: "{{ DOCKER.host_path }}/cloudtube/config.js"
+
+
+- name: Copy newleaf config file
+  template:
+    src: "config.py"
+    dest: "{{ DOCKER.host_path }}/cloudtube/configuration.py"
+
+- name: "Start cloudtube-newleaf"
+  docker_container:
+    name: cloudtube-newleaf
+    image: abeltramo/newleaf:latest
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: always
+    volumes:
+      - "{{ DOCKER.host_path }}/cloudtube/configuration.py:/workdir/configuration.py"
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+    purge_networks: yes
+
+- name: "Start cloudtube"
+  docker_container:
+    name: cloudtube
+    image: abeltramo/cloudtube:latest
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: always
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+    purge_networks: yes
+    volumes:
+      - "{{ DOCKER.host_path }}/cloudtube/db:/workdir/db"
+      - "{{ DOCKER.host_path }}/cloudtube/config.js:/workdir/config/config.js"
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "10412"
+      traefik.enable: "true"

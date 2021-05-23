@@ -1,0 +1,41 @@
+- name: "Copy Dockerfile config"
+  copy:
+    src: Dockerfile
+    dest: /tmp/bcoin-node/
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- name: "Build Docker image from Dockerfile"
+  docker_image:
+    name: abeltramo/bcoin-node
+    pull: no
+    build:
+      path: /tmp/bcoin-node/
+      args:
+        BCOIN_VERSION: "v{{ BCOIN_VERSION }}"
+    tag: "{{ BCOIN_VERSION }}"
+    source: build
+    push: false
+
+- docker_container:
+    name: bcoin-node
+    image: "abeltramo/bcoin-node:{{ BCOIN_VERSION }}"
+    pull: false
+    state: started
+    restart: yes
+    restart_policy: always
+    ports:
+      - "8333:8333"
+    volumes:
+      - "{{ DOCKER.host_path }}/bcoin:/data"
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "8332"
+      traefik.enable: "true"
+    env:
+      BCOIN_NETWORK: "main"
+      BCOIN_PREFIX: "/data"
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+    purge_networks: yes

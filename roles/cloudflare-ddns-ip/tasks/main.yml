@@ -1,0 +1,33 @@
+- docker_container:
+    name: cloudflare-ddns
+    image: abeltramo/cloudflare-ddns:latest
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: always
+    env:
+      AUTH_EMAIL: "{{ cloudflare.auth_email }}"
+      AUTH_KEY: "{{ cloudflare.auth_key }}"
+      ZONE_IDENTIFIER: "{{ cloudflare.zone_identifier }}"
+      RECORD_NAME: "{{ external_domain_name }}"
+      HEALTHCHECK_START_URL: "{{ HEALTHCHECK.url }}/{{ HEALTHCHECK.id }}/start"
+      HEALTHCHECK_END_URL: "{{ HEALTHCHECK.url }}/{{ HEALTHCHECK.id }}"
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+    purge_networks: yes
+  when: HEALTHCHECK is defined
+
+- docker_container:
+    name: cloudflare-ddns
+    image: abeltramo/cloudflare-ddns:latest
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: always
+    env:
+      AUTH_EMAIL: "{{ cloudflare.auth_email }}"
+      AUTH_KEY: "{{ cloudflare.auth_key }}"
+      ZONE_IDENTIFIER: "{{ cloudflare.zone_identifier }}"
+      RECORD_NAME: "{{ external_domain_name }}"
+    network_mode: bridge
+  when: HEALTHCHECK is not defined

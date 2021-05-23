@@ -1,0 +1,84 @@
+- docker_container:
+    name: sonarr
+    image: linuxserver/sonarr
+    pull: true
+    state: started
+    restart_policy: always
+    volumes:
+      - "{{ DOCKER.host_path }}/sonarr/config:/config"
+      - "{{ series_path }}:/tv"
+      - "{{ torrent_path }}:/downloads"
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "8989"
+      traefik.enable: "true"
+    env:
+      TZ: 'Europe/London'
+      PGID: "1000"
+      PUID: "1000"
+    purge_networks: yes
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+
+- docker_container:
+    name: radarr
+    image: linuxserver/radarr
+    state: started
+    restart_policy: always
+    volumes:
+      - "{{ DOCKER.host_path }}/radarr/config:/config"
+      - "{{ film_path }}:/movies"
+      - "{{ torrent_path }}:/downloads"
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "7878"
+      traefik.enable: "true"
+    env:
+      TZ: 'Europe/London'
+      PGID: "1000"
+      PUID: "1000"
+    purge_networks: yes
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+
+- docker_container:
+    name: bazarr
+    image: linuxserver/bazarr
+    state: started
+    restart_policy: always
+    volumes:
+      - "{{ DOCKER.host_path }}/bazarr/config:/config"
+      - "{{ film_path }}:/movies"
+      - "{{ series_path }}:/tv"
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "6767"
+      traefik.enable: "true"
+    env:
+      TZ: 'Europe/London'
+      PGID: "1000"
+      PUID: "1000"
+    purge_networks: yes
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+
+#- docker_container:
+#    name: lidarr
+#    image: linuxserver/lidarr
+#    state: started
+#    restart_policy: always
+#    volumes:
+#      - "{{ DOCKER.host_path }}/lidarr/config:/config"
+#      - "{{ music_path }}:/music"
+#      - "{{ torrent_path }}:/downloads"
+#    labels:
+#      traefik.frontend.rule: "Host: {{ traefik.url }}"
+#      traefik.port: "8686"
+#      traefik.enable: "true"
+#    env:
+#      TZ: 'Europe/London'
+#      PGID: "1000"
+#      PUID: "1000"
+#    purge_networks: yes
+#    networks:
+#      - name: "{{ DOCKER.net.traefik }}"

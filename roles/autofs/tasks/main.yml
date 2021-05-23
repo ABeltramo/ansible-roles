@@ -1,0 +1,26 @@
+- name: Gather package facts
+  package_facts:
+    manager: apt
+
+- name: "Install autofs"
+  apt:
+    name: [autofs]
+    update_cache: yes
+  when: '"autofs" not in ansible_facts.packages'
+
+- name: Ensure auto.nfsdb is set in auto.master
+  ansible.builtin.lineinfile:
+    path: /etc/auto.master
+    regexp: '^/etc/auto.nfsdb'
+    line: /mnt/nfs /etc/auto.nfsdb --timeout=0 --browse
+
+- name: "Copy auto.nfsdb"
+  template:
+    src: auto.nfsdb
+    dest: /etc/auto.nfsdb
+    mode: u=rw,g=rw,o=rw
+
+- name: "Restart autofs service"
+  service:
+    name: autofs
+    state: restarted

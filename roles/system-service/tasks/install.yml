@@ -1,0 +1,12 @@
+- name: Copy service {{service_name}} template
+  template:
+    src: service.service
+    dest: "/lib/systemd/system/{{ service_name }}.service"
+    mode: 644
+
+
+- name: Start service {{service_name}}
+  service:
+    name: "{{ service_name }}.service"
+    state: started
+    enabled: yes

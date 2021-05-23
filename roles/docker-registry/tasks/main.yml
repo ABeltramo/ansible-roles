@@ -1,0 +1,28 @@
+- name: Ensure docker-registry folder exists
+  file:
+    path: "{{ DOCKER.host_path }}/docker-registry/"
+    recurse: yes
+    state: directory
+
+- name: Copy python config file
+  template:
+    src: "config.yml"
+    dest: "{{ DOCKER.host_path }}/docker-registry/config.yml"
+
+
+- name: Start container Docker registry
+  docker_container:
+    name: docker-registry
+    image: "registry:2"
+    state: started
+    recreate: yes
+    pull: yes
+    restart_policy: always
+    env:
+      REGISTRY_STORAGE_DELETE_ENABLED: "true" # to actually delete it (see "garbage collector docker registry"): docker exec -it -u root docker-registry bin/registry garbage-collect --delete-untagged /etc/docker/registry/config.yml
+    volumes:
+      - "{{ registry_path }}:/var/lib/registry"
+      - "{{ DOCKER.host_path }}/docker-registry/config.yml:/etc/docker/registry/config.yml"
+    networks:
+      - name: "{{ DOCKER.net.caddy }}"
+    purge_networks: yes

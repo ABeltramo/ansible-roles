@@ -1,0 +1,8 @@
+- name: "Create db: {{ SQL.db }}, user: {{ SQL.user }}, pass: {{ SQL.password }}"
+  command: |
+    docker exec -it mysql mysql --user={{ SQL.admin }} --password={{ SQL.admin_password }} -e "\
+    CREATE USER IF NOT EXISTS '{{ SQL.user }}'@'%' IDENTIFIED BY '{{ SQL.password }}'; \
+    CREATE DATABASE IF NOT EXISTS {{ SQL.db }}; \
+    ALTER DATABASE {{ SQL.db }} CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci; \
+    GRANT ALL PRIVILEGES ON {{ SQL.db }}.* TO '{{ SQL.user }}'@'%'; \
+    FLUSH PRIVILEGES;"

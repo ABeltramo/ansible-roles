@@ -1,0 +1,31 @@
+- docker_container:
+    name: unifi-controller
+    image: linuxserver/unifi-controller
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: always
+    ports:
+      - 3478:3478/udp
+      - 10001:10001/udp
+      - 8080:8080
+      - 8443:8443
+      #- 1900:1900/udp #optional
+      - 8843:8843 #optional
+      - 8880:8880 #optional
+      - 6789:6789 #optional
+      - 5514:5514 #optional
+    env:
+      MEM_LIMIT: "1024M"
+      PUID: "1000"
+      PGID: "1000"
+    volumes:
+      - "{{ DOCKER.host_path }}/unifi-controller:/config"
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "8443"
+      traefik.enable: "true"
+      com.centurylinklabs.watchtower.enable: "false"
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+    purge_networks: yes

@@ -1,0 +1,51 @@
+- file:
+    path: "{{ nextcloud_config }}"
+    state: directory
+
+- name: "Copy config file"
+  copy:
+    src: nextcloud/config.php
+    dest: "{{ nextcloud_config }}/config.php"
+
+- docker_service:
+    project_name: nextcloud
+    recreate: always
+    pull: yes
+    definition:
+      version: '3'
+
+      services:
+        redis:
+          image: redis:alpine
+          restart: always
+          networks:
+            - DBMS
+        #        clamav:
+        #          image: mkodockx/docker-clamav
+        #          restart: always
+        #          networks:
+        #            - DBMS
+
+        nextcloud:
+          image: linuxserver/nextcloud:latest
+          volumes:
+            - "{{ data_path }}:/data"
+            - "{{ nextcloud_config }}:/config/www/nextcloud/config/"
+          restart: always
+          environment:
+            - PUID=99
+            - PGID=100
+            - TZ=Europe/London
+          depends_on:
+            - redis
+          networks:
+            - CADDY
+            - DBMS
+
+      networks:
+        CADDY:
+          external:
+            name: "{{ DOCKER.net.caddy }}"
+        DBMS:
+          external:
+            name: "{{ DOCKER.net.dbms }}"

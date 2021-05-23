@@ -1,0 +1,37 @@
+- name: ensure airsonic/data exists
+  file:
+    path: "{{ DOCKER.host_path }}/airsonic/data/"
+    recurse: yes
+    state: directory
+
+- name: "Set airsonic.properties"
+  template:
+    src: airsonic.properties
+    dest: "{{ DOCKER.host_path }}/airsonic/data/airsonic.properties"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- name: Start container Airsonic
+  docker_container:
+    name: airsonic
+    image: "airsonic/airsonic"
+    state: started
+    recreate: no
+    pull: yes
+    restart_policy: always
+    ports:
+      - 4040:4040
+    volumes:
+      - "{{ DOCKER.host_path }}/airsonic/data:/airsonic/data"
+      - "{{ DOCKER.host_path }}/airsonic/playlist:/airsonic/playlist"
+      - "{{ DOCKER.host_path }}/airsonic/podcast:/airsonic/podcast"
+      - "/mnt/data/music:/airsonic/music"
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+      - name: "{{ DOCKER.net.dbms }}"
+    purge_networks: yes
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "4040"
+      traefik.enable: "true"

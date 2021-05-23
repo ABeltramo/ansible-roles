@@ -1,0 +1,23 @@
+- docker_container:
+    name: lazylibrarian
+    image: linuxserver/lazylibrarian
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: always
+    volumes:
+      - ~/lazylibrarian/config:/config
+      - /mnt/data/books:/books
+      - /mnt/data/torrent:/downloads
+    env:
+      DOCKER_MODS: "linuxserver/calibre-web:calibre"
+      TZ: "Europe/London"
+      PGID: "0"
+      PUID: "0"
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "5299"
+      traefik.enable: "true"
+    purge_networks: yes
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"

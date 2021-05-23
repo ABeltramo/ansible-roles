@@ -1,0 +1,80 @@
+- name: "Install pyOpenSSL"
+  pip:
+    name: [pyOpenSSL]
+
+- name: "Create CA folders"
+  file:
+    path: /etc/ssl/crt/
+    state: directory
+
+- name: "Create CSR folders"
+  file:
+    path: /etc/ssl/csr/
+    state: directory
+
+- name: "Create Private cert folders"
+  file:
+    path: /etc/ssl/private/
+    state: directory
+
+- name: "Create Public cert folders"
+  file:
+    path: /etc/ssl/client/
+    state: directory
+
+- apt:
+    name: python-openssl
+    update_cache: yes
+
+# Following tutorial from: https://gist.github.com/mtigas/952344
+- name: "Generate private CA key"
+  openssl_privatekey:
+    path: /etc/ssl/private/ca.key
+
+- openssl_csr:
+    path: "/etc/ssl/csr/{{ common_name }}.csr"
+    privatekey_path: /etc/ssl/private/ca.key
+    common_name: "{{ common_name }}"
+
+- name: "Generate a Self Signed OpenSSL certificate (Certification Authority certificate)"
+  openssl_certificate:
+    path: /etc/ssl/crt/ca.pem
+    privatekey_path: /etc/ssl/private/ca.key
+    csr_path: "/etc/ssl/csr/{{ common_name }}.csr"
+    provider: selfsigned
+    force: no # Set to yes to regenerate
+
+- name: "Generate client secret key"
+  openssl_privatekey:
+    path: /etc/ssl/private/client.key
+
+- name: "Generate client CSR"
+  openssl_csr:
+    path: /etc/ssl/csr/client.csr
+    privatekey_path: /etc/ssl/private/client.key
+
+- name: "Generate the client certificate"
+  openssl_certificate:
+    path: /etc/ssl/client/client-cert.pem
+    csr_path: /etc/ssl/csr/client.csr
+    ownca_path: /etc/ssl/crt/ca.pem
+    ownca_privatekey_path: /etc/ssl/private/ca.key
+    provider: ownca
+    force: no # Set to yes to regenerate
+
+- name: "Export PKCS#12 file"
+  openssl_pkcs12:
+    action: export
+    path: /tmp/client.full.pfx
+    friendly_name: "{{ name }}"
+    privatekey_path: /etc/ssl/private/client.key
+    certificate_path: /etc/ssl/client/client-cert.pem
+    other_certificates: /etc/ssl/crt/ca.pem
+    state: present
+    force: yes
+    passphrase: "{{ passphrase }}"
+
+- name: "Get back public key"
+  fetch:
+    src: /tmp/client.full.pfx
+    dest: /tmp/client.crt

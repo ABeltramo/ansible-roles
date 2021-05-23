@@ -1,0 +1,8 @@
+- name: Setup golem service
+  include_role:
+    name: system-service
+    tasks_from: install
+  vars:
+    service_name: "golem"
+    description: "Auto start golem network service"
+    command: "/usr/local/bin/golemapp --mainnet --accept-all-terms --password {{ password }} --datadir {{ datadir }}"

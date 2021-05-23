@@ -1,0 +1,24 @@
+- name: Start container Telegraf
+  docker_container:
+    name: telegraf
+    image: "telegraf"
+    state: started
+    restart: yes
+    pull: yes
+    restart_policy: always
+    volumes:
+      - "{{ telegraf_folder }}telegraf.conf:/etc/telegraf/telegraf.conf:ro"
+      - "/:/hostfs:ro"
+      - "/proc:/hostfs/proc:ro"
+      - "/run:/hostfs/run:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/etc:/hostfs/etc:ro"
+      - "/sys:/hostfs/sys:ro"
+    env:
+      HOST_MOUNT_PREFIX: /hostfs
+      HOST_PROC: /hostfs/proc
+      PROC_ROOT: /hostfs/proc
+      HOST_RUN: /hostfs/run
+      HOST_ETC: /hostfs/etc
+      HOST_SYS: /hostfs/sys
+    network_mode: host

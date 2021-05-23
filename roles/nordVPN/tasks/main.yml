@@ -1,0 +1,37 @@
+- name: "Check if nordvpn is installed"
+  command: dpkg-query -W nordvpn
+  register: nordvpn_check_deb
+  failed_when: nordvpn_check_deb.rc > 1
+  changed_when: nordvpn_check_deb.rc == 1
+
+- name: "Download nordvpn"
+  get_url:
+    url="https://repo.nordvpn.com/deb/nordvpn/debian/pool/main/nordvpn-release_1.0.0_all.deb"
+    dest="/tmp/nordvpn.deb"
+  when: nordvpn_check_deb.rc == 1
+
+- name: "Install nordvpn"
+  apt: deb="/tmp/nordvpn.deb"
+  when: nordvpn_check_deb.rc == 1
+
+- name: "Update repositories and install nordvpn"
+  apt:
+    name:
+      - nordvpn
+    update_cache: yes
+  when: nordvpn_check_deb.rc == 1
+
+
+- name: "NordVPN settings"
+  shell: |
+    nordvpn login --username {{ nordVPN.user }} --password {{ nordVPN.pass }}
+    nordvpn whitelist add port 22 protocol tcp
+    nordvpn whitelist add port 80 protocol tcp
+    nordvpn whitelist add port 9001 protocol tcp
+    nordvpn whitelist add subnet 10.1.1.1/24
+    nordvpn set technology NordLynx
+    nordvpn set autoconnect on {{ server }}
+    nordvpn set killswitch on
+    nordvpn connect {{ server }}
+    exit 0
+  ignore_errors: yes

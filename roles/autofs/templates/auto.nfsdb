@@ -1,0 +1,3 @@
+{% for name,remote,local,opts in mount %}
+{{ name }} -fstype={{ opts | default('nfs,ro,noatime,timeo=100') }} {{ remote }}:{{ local }}
+{% endfor %}

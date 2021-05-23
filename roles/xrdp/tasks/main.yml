@@ -1,0 +1,17 @@
+- name: Gather package facts
+  package_facts:
+    manager: apt
+
+- name: "Install xrdp"
+  apt:
+    name: [xrdp]
+    update_cache: yes
+  when: '"xrdp" not in ansible_facts.packages'
+
+
+# See https://github.com/sddm/sddm/issues/323
+- name: Reduce sddm-greeter cpu usage on idle
+  ansible.builtin.lineinfile:
+    path: /etc/security/pam_env.conf
+    regexp: '^QT_QUICK_BACKEND DEFAULT=software'
+    line: QT_QUICK_BACKEND DEFAULT=software

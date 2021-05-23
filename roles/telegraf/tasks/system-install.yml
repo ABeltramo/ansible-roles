@@ -1,0 +1,34 @@
+- name: "Install basic GPG packages"
+  apt:
+    name:
+      - gnupg2
+    update_cache: yes
+
+- name: Import InfluxData GPG signing key [Debian/Ubuntu]
+  apt_key:
+    url: "https://repos.influxdata.com/influxdb.key"
+    state: present
+
+- name: Add InfluxData repository [Debian/Ubuntu]
+  apt_repository:
+    repo: deb https://repos.influxdata.com/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable
+    state: present
+
+- name: Install Telegraf packages [Debian/Ubuntu]
+  apt:
+    name:
+      - apt-transport-https
+      - telegraf
+    state: latest
+    update_cache: yes
+    cache_valid_time: 3600
+  register: apt_result
+  until: apt_result is success
+  retries: 2
+  delay: 5
+
+- name: Start the Telegraf service
+  service:
+    name: telegraf
+    state: restarted
+    enabled: yes

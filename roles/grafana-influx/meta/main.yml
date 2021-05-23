@@ -1,0 +1,2 @@
+dependencies:
+  - role: mariadb-create-db-user

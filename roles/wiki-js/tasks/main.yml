@@ -1,0 +1,22 @@
+- docker_container:
+    name: wiki-js
+    image: requarks/wiki:2
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: always
+    env:
+      DB_TYPE: mysql
+      DB_HOST: "{{ SQL.host }}"
+      DB_PORT: "{{ SQL.port }}"
+      DB_USER: "{{ SQL.user }}"
+      DB_PASS: "{{ SQL.password }}"
+      DB_NAME: "{{ SQL.db }}"
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "3000"
+      traefik.enable: "true"
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+      - name: "{{ DOCKER.net.dbms }}"
+    purge_networks: yes

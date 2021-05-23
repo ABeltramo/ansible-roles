@@ -1,0 +1,19 @@
+- docker_container:
+    name: ipsec-vpn-server
+    image: hwdsl2/ipsec-vpn-server
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: always
+    ports:
+      - "4500:4500/udp"
+      - "1701:1701/udp"
+      - "500:500/udp"
+    env:
+      TZ: 'Europe/London'
+      VPN_IPSEC_PSK: "{{ psk }}"
+      VPN_USER: "{{ user }}"
+      VPN_PASSWORD: "{{ password }}"
+      VPN_DNS_NAME: "{{ external_name }}"
+    privileged: true
+    purge_networks: yes

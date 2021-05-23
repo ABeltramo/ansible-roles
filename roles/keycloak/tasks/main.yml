@@ -1,0 +1,21 @@
+- docker_container:
+    name: keycloak
+    state: started
+    image: jboss/keycloak:6.0.1
+    restart: yes
+    restart_policy: always
+    command: [ "-b", "0.0.0.0", "-Dkeycloak.profile.feature.docker=enabled" ]
+    env:
+      DB_VENDOR: mariadb
+      DB_ADDR: "{{ SQL.host }}"
+      DB_DATABASE: "{{ SQL.db }}"
+      DB_USER: "{{ SQL.user }}"
+      DB_PASSWORD: "{{ SQL.password }}"
+      KEYCLOAK_HOSTNAME: "{{ hostname }}"
+      PROXY_ADDRESS_FORWARDING: "true"
+      KEYCLOAK_USER: "{{ admin_user }}"
+      KEYCLOAK_PASSWORD: "{{ admin_password }}"
+    purge_networks: yes
+    networks:
+      - name: "{{ DOCKER.net.dbms }}"
+      - name: "{{ DOCKER.net.caddy }}"

@@ -1,0 +1,39 @@
+- name: "Download blacklist"
+  get_url:
+    url: https://raw.githubusercontent.com/trick77/ipset-blacklist/master/update-blacklist.sh
+    dest: /usr/local/sbin/update-blacklist.sh
+    mode: 'u+rwx'
+
+- name: "Create ipset-blacklist folder"
+  file:
+    path: /etc/ipset-blacklist
+    state: directory
+
+- name: "Install dependencies"
+  apt:
+    name: [ipset, iprange]
+    update_cache: yes
+
+- name: "Copy config"
+  copy:
+    src: ip-ban/config.conf
+    dest: /etc/ipset-blacklist/ipset-blacklist.conf
+    mode: 'u+rwx'
+
+- name: "Generate /etc/ipset-blacklist/ip-blacklist.restore"
+  shell: /usr/local/sbin/update-blacklist.sh /etc/ipset-blacklist/ipset-blacklist.conf
+
+- name: "Enable blacklists"
+  shell: ipset restore < /etc/ipset-blacklist/ip-blacklist.restore
+
+# Already done by update-blacklist.sh
+# - name: "Enable iptables"
+#   shell: iptables -I INPUT 1 -m set --match-set blacklist src -j DROP
+
+- name: "Set cronjob"
+  copy:
+    src: ip-ban/cronjob
+    dest: /etc/cron.d/ip-blacklist
+    owner: root
+    group: root
+    mode: 'a+x'

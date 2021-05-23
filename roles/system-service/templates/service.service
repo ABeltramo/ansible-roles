@@ -1,0 +1,17 @@
+[Unit]
+Description={{ description | default('A service added using Ansible system-service task') }}
+After=network.target
+After=syslog.target
+
+[Install]
+WantedBy=multi-user.target
+Alias={{ service_name }}.service
+
+[Service]
+User={{ user | default('root')}}
+Group={{ group | default('root')}}
+
+# Start main service
+ExecStart={{ command }}
+
+Restart=always

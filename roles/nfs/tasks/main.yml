@@ -1,0 +1,20 @@
+- name: "Install nfs-kernel"
+  apt:
+    name: [nfs-kernel-server]
+    update_cache: yes
+
+- name: "Copy /etc/exports"
+  template:
+    src: exports
+    dest: /etc/exports
+    owner: root
+    group: root
+    mode: a+x
+
+- name: "Activate NFS"
+  command: exportfs -a
+
+- name: "Restart NFS kernel server"
+  service:
+    name: nfs-kernel-server
+    state: restarted

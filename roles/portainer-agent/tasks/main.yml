@@ -1,0 +1,14 @@
+- name: "Start portainer agent"
+  docker_container:
+    name: portainer
+    image: portainer/agent
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: always
+    ports:
+      - "9001:9001"
+    volumes:
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+      - /var/run/docker.sock:/var/run/docker.sock
+    purge_networks: no

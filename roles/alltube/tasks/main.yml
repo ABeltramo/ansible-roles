@@ -1,0 +1,28 @@
+- name: Ensure alltube folder exists
+  file:
+    path: "{{ DOCKER.host_path }}/alltube/"
+    recurse: yes
+    state: directory
+
+- name: Copy config file
+  template:
+    src: "config.yml"
+    dest: "{{ DOCKER.host_path }}/alltube/config.yml"
+
+- name: "Start alltube"
+  docker_container:
+    name: alltube
+    image: rudloff/alltube
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: always
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+    purge_networks: yes
+    volumes:
+      - "{{ DOCKER.host_path }}/alltube/config.yml:/var/www/html/config/config.yml"
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "80"
+      traefik.enable: "true"

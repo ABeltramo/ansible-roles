@@ -1,0 +1,21 @@
+- name: "Create DB network"
+  docker_network:
+    name: "{{ DOCKER.net.dbms }}"
+
+- docker_container:
+    name: mysql
+    state: started
+    image: mariadb
+    pull: true
+    restart: no
+    restart_policy: always
+    volumes:
+      - "{{ DOCKER.host_path }}/mysql:/var/lib/mysql"
+    ports:
+      - "3306:3306"
+    env:
+      MYSQL_ROOT_PASSWORD: "{{ SQL.root_password }}"
+    purge_networks: yes
+    networks:
+      - name: "{{ DOCKER.net.dbms }}"
+        aliases: [mysql]

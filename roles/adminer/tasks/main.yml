@@ -1,0 +1,35 @@
+- name: Create adminer folder
+  file:
+    path: "{{ DOCKER.host_path }}/adminer/hydra"
+    state: directory
+    mode: '0755'
+  become: no
+
+- name: git clone hydra dark theme
+  git:
+    accept_hostkey: yes
+    repo: https://github.com/Niyko/Hydra-Dark-Theme-for-Adminer.git
+    dest: "{{ DOCKER.host_path }}/adminer/hydra"
+    update: yes
+  become: n
+
+- name: "Start adminer"
+  docker_container:
+    name: adminer
+    image: adminer
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: always
+    purge_networks: yes
+    env:
+      ADMINER_DEFAULT_SERVER: "{{ SQL.host }}"
+    volumes:
+      - "{{ DOCKER.host_path }}/adminer/hydra/adminer.css:/var/www/html/adminer.css"
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "8080"
+      traefik.enable: "true"
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+      - name: "{{ DOCKER.net.dbms }}"

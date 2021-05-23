@@ -1,0 +1,36 @@
+- name: Ensure torrent complete folder exists
+  file:
+    path: "{{ torrent_path }}/complete/"
+    recurse: yes
+    state: directory
+
+- name: Ensure torrent incomplete folder exists
+  file:
+    path: "{{ torrent_path }}/incomplete/"
+    recurse: yes
+    state: directory
+
+- docker_container:
+    name: deluge
+    image: linuxserver/deluge
+    pull: true
+    state: started
+    restart: yes
+    restart_policy: always
+    volumes:
+      - "{{ DOCKER.host_path }}/deluge:/config"
+      - "{{ torrent_path }}:/downloads"
+    ports:
+      - 51413:51413/udp
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "8112"
+      traefik.enable: "true"
+    env:
+      TZ: 'Europe/London'
+      PGID: "1000"
+      PUID: "1000"
+      DELUGE_LOGLEVEL: info
+    purge_networks: yes
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"

@@ -1,0 +1,57 @@
+- name: ensure pihole local folder exists (etc-dnsmasqd)
+  file:
+    path: "{{ DOCKER.host_path }}/pihole/etc-dnsmasqd/"
+    recurse: yes
+    state: directory
+
+- name: ensure pihole local folder exists (etc-pihole)
+  file:
+    path: "{{ DOCKER.host_path }}/pihole/etc-pihole/"
+    recurse: yes
+    state: directory
+
+- name: "Set LAN DNS list"
+  template:
+    src: lan.list
+    dest: "{{ DOCKER.host_path }}/pihole/etc-pihole/custom.list"
+    mode: u=rw,g=r,o=r
+
+- name: "Set pihole-FTL.conf"
+  template:
+    src: pihole-FTL.conf
+    dest: "{{ DOCKER.host_path }}/pihole/etc-pihole/pihole-FTL.conf"
+    mode: u=rw,g=r,o=r
+
+- docker_container:
+    name: pihole
+    image: pihole/pihole:v5.7
+    pull: false
+    state: started
+    restart: yes
+    restart_policy: always
+    ports:
+      - '53:53/tcp'
+      - '53:53/udp'
+      - "67:67/udp"
+    env:
+      DNS1: 1.1.1.1
+      DNS2: 1.0.0.1
+      PROXY_LOCATION: pihole
+      VIRTUAL_PORT: "80"
+      TZ: 'Europe/London'
+      WEBPASSWORD: "{{ admin_password }}"
+      VIRTUAL_HOST: pi.hole
+      DNSMASQ_LISTENING: all
+    volumes:
+      - "{{ DOCKER.host_path }}/pihole/etc-pihole/:/etc/pihole/"
+      - "{{ DOCKER.host_path }}/pihole/etc-dnsmasqd/:/etc/dnsmasq.d/"
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+    labels:
+      # required when using --docker.exposedbydefault=false
+      traefik.enable: "true"
+      # https://www.techjunktrunk.com/docker/2017/11/03/traefik-default-server-catch-all/
+      traefik.frontend.rule: "HostRegexp:pi.hole,{catchall:.*}"
+      traefik.frontend.priority: "1"
+      traefik.port: "80"
+    purge_networks: yes

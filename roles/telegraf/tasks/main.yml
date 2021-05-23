@@ -1,0 +1,22 @@
+- name: ensure telegraf dir exists
+  file:
+    path: "{{ telegraf_folder }}"
+    state: directory
+    recurse: yes
+
+- name: Gather package facts
+  package_facts:
+    manager: apt
+
+- name: Create Telegraf configuration
+  template:
+    src: "telegraf.conf.j2"
+    dest: "{{ telegraf_folder}}telegraf.conf"
+
+- name: Docker install
+  include: docker-install.yml
+  when: '"docker-ce" in ansible_facts.packages'
+
+- name: System install
+  include: system-install.yml
+  when: '"docker-ce" not in ansible_facts.packages'
