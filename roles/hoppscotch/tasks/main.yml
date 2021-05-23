@@ -1,10 +1,10 @@
 - name: "Start hoppscotch"
-  docker_container:
+  community.docker.docker_container:
     name: hoppscotch
     image: hoppscotch/hoppscotch
     pull: true
     state: started
-    restart: yes
+    recreate: yes
     restart_policy: always
     networks:
       - name: "{{ DOCKER.net.traefik }}"

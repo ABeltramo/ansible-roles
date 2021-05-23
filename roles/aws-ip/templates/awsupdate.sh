@@ -1,11 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ZONEID='{{ hosted_zone }}'                             # Hosted Zone ID e.g. BJBK35SKMM9OE
-RECORDSET='{{ external_domain_name }}'                          # The CNAME you want to update e.g. hello.example.com
-TTL=300                               # The Time-To-Live of this recordset
-TYPE='A'                              # Change to AAAA if using an IPv6 address
+RECORDSET='{{ external_domain_name }}'                 # The CNAME you want to update e.g. hello.example.com
+TTL=300                                                # The Time-To-Live of this recordset
+TYPE='A'                                               # Change to AAAA if using an IPv6 address
 COMMENT="Auto updating @ `date`"
-IP=`curl -ss https://ipinfo.io/ip`  # Get the external IP address
+IP=`curl -ss https://ipinfo.io/ip`                     # Get the external IP address
 LOGPATH='/var/log'
 
 usage () {

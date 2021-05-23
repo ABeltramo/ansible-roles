@@ -1,4 +1,4 @@
-- docker_container:
+- community.docker.docker_container:
     name: jackett
     image: linuxserver/jackett
     pull: true

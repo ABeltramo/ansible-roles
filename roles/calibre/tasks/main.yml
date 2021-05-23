@@ -1,9 +1,9 @@
-- docker_container:
+- community.docker.docker_container:
     name: calibre
     image: linuxserver/calibre
     pull: true
     state: started
-    restart: yes
+    recreate: yes
     restart_policy: always
     volumes:
       - "{{ DOCKER.host_path }}/calibre/db:/config"
@@ -20,12 +20,12 @@
       - name: "{{ DOCKER.net.traefik }}"
     purge_networks: yes
 
-- docker_container:
+- community.docker.docker_container:
     name: calibre-web
     image: linuxserver/calibre-web
     pull: true
     state: started
-    restart: yes
+    recreate: yes
     restart_policy: always
     volumes:
       - "{{ DOCKER.host_path }}/calibre/config:/config"

@@ -1,9 +1,9 @@
-- docker_container:
+- community.docker.docker_container:
     name: netdata
     image: netdata/netdata
     pull: true
     state: started
-    restart: yes
+    recreate: yes
     restart_policy: always
     ports:
       - "19999:19999"

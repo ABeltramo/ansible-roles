@@ -2,12 +2,12 @@
   docker_network:
     name: "{{ DOCKER.net.dbms }}"
 
-- docker_container:
+- community.docker.docker_container:
     name: mysql
     state: started
     image: mariadb
     pull: true
-    restart: no
+    recreate: no
     restart_policy: always
     volumes:
       - "{{ DOCKER.host_path }}/mysql:/var/lib/mysql"

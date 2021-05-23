@@ -13,12 +13,12 @@
     mode: u=rw,g=r,o=r
 
 - name: "Start Neolink"
-  docker_container:
+  community.docker.docker_container:
     name: neolink
     image: thirtythreeforty/neolink:latest
     pull: true
     state: started
-    restart: yes
+    recreate: yes
     restart_policy: always
     ports:
       - 8554:8554
@@ -33,12 +33,12 @@
     purge_networks: yes
 
 - name: "Start Homebridge"
-  docker_container:
+  community.docker.docker_container:
     name: homebridge
     image: oznu/homebridge:latest
     pull: true
     state: started
-    restart: yes
+    recreate: yes
     restart_policy: always
     volumes:
       - "{{ DOCKER.host_path }}/homebridge:/homebridge"

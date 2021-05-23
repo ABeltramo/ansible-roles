@@ -15,19 +15,19 @@
     name: "{{ DOCKER.net.traefik }}"
 
 - name: "Start Traefik"
-  docker_container:
-    name: "{{ DOCKER.net.traefik }}"
+  community.docker.docker_container:
+    name: traefik-local
     image: traefik:1.7
     pull: false
     state: started
-    restart: no
+    recreate: no
     restart_policy: always
-    purge_networks: yes
+    purge_networks: no
+    container_default_behavior: "compatibility"
     ports:
       - "80:80"
     #      - "8080:8080"
     volumes:
       - "{{ DOCKER.host_path }}/traefik.toml:/etc/traefik/traefik.toml"
       - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - name: "{{ DOCKER.net.traefik }}"
+    network_mode: "{{ DOCKER.net.traefik }}"

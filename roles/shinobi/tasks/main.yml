@@ -35,12 +35,12 @@
     state: present
     source: build
 
-- docker_container:
+- community.docker.docker_container:
     name: shinobi
     image: abeltramo/shinobi
     pull: false
     state: started
-    restart: yes
+    recreate: yes
     restart_policy: always
     env:
       TZ: "Europe/London"

@@ -1,9 +1,9 @@
-- docker_container:
+- community.docker.docker_container:
     name: firefox-sync
     image:  mozilla/syncserver:latest
     state: started
     pull: true
-    restart: yes
+    recreate: yes
     restart_policy: always
     env:
       SYNCSERVER_PUBLIC_URL: "{{ public_url }}"

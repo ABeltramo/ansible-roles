@@ -19,12 +19,12 @@
 
 
 - name: "Start intellij"
-  docker_container:
+  community.docker.docker_container:
     name: intellij-projector
     image: projector-idea-c
     pull: false
     state: started
-    restart: no
+    recreate: no
     restart_policy: on-failure
     restart_retries: 2
     command: bash -c "./run.sh"

@@ -1,9 +1,9 @@
-- docker_container:
+- community.docker.docker_container:
     name: lazylibrarian
     image: linuxserver/lazylibrarian
     pull: true
     state: started
-    restart: yes
+    recreate: yes
     restart_policy: always
     volumes:
       - ~/lazylibrarian/config:/config

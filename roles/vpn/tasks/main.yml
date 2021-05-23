@@ -1,9 +1,9 @@
-- docker_container:
+- community.docker.docker_container:
     name: ipsec-vpn-server
     image: hwdsl2/ipsec-vpn-server
     pull: true
     state: started
-    restart: yes
+    recreate: yes
     restart_policy: always
     ports:
       - "4500:4500/udp"

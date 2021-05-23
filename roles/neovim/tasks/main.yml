@@ -1,7 +1,7 @@
 - name: "apt install Neovim"
   become: yes
   apt:
-    name: [neovim]
+    name: [ neovim ]
     update_cache: yes
 
 - name: "create vim-plug folder"
@@ -31,4 +31,3 @@
 - name: "install plugins"
   become: no
   command: 'nvim -es -u .config/nvim/init.vim -i NONE -c "PlugInstall" -c "qa"'
-

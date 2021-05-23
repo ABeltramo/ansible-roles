@@ -9,7 +9,7 @@
     state: directory
 
 - name: "Stop transmission before changing configs"
-  docker_container:
+  community.docker.docker_container:
     name: transmission
     image: linuxserver/transmission
     pull: true
@@ -25,12 +25,12 @@
     src: transmission-minuto.json
     dest: "{{ DOCKER.host_path }}/transmission/config/settings.json"
 
-- docker_container:
+- community.docker.docker_container:
     name: transmission
     image: linuxserver/transmission
     pull: true
     state: started
-    restart: yes
+    recreate: yes
     restart_policy: always
     volumes:
       - "{{ DOCKER.host_path }}/transmission/config:/config"

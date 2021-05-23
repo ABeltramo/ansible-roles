@@ -13,7 +13,7 @@
     mode: u=rw,g=r,o=r
 
 - name: Start container Airsonic
-  docker_container:
+  community.docker.docker_container:
     name: airsonic
     image: "airsonic/airsonic"
     state: started

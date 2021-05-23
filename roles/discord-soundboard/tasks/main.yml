@@ -15,12 +15,12 @@
     dest: "{{ DOCKER.host_path }}/discord-sb/config.json"
 
 - name: "Start Discord sound board"
-  docker_container:
+  community.docker.docker_container:
     name: discord-sb
     image: abeltramo/discord-soundbot
     pull: true
     state: started
-    restart: yes
+    recreate: yes
     restart_policy: always
     networks:
       - name: "{{ DOCKER.net.caddy }}"

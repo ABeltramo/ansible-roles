@@ -18,12 +18,12 @@
     source: build
     push: false
 
-- docker_container:
+- community.docker.docker_container:
     name: bcoin-node
     image: "abeltramo/bcoin-node:{{ BCOIN_VERSION }}"
     pull: false
     state: started
-    restart: yes
+    recreate: yes
     restart_policy: always
     ports:
       - "8333:8333"

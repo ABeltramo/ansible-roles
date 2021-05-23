@@ -9,12 +9,12 @@
     src: "settings.py"
     dest: "{{ DOCKER.host_path }}/healthchecks/local_settings.py"
 
-- docker_container:
+- community.docker.docker_container:
     name: healthchecks
     image: linuxserver/healthchecks
     pull: true
     state: started
-    restart: yes
+    recreate: yes
     restart_policy: always
     volumes:
       - "{{ DOCKER.host_path }}/healthchecks:/config/"

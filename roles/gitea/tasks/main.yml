@@ -6,12 +6,12 @@
     group: root
     mode: u=rw,g=r,o=r
 
-- docker_container:
+- community.docker.docker_container:
     name: gitea
     image: gitea/gitea:1.10.0
     state: started
     pull: true
-    restart: yes
+    recreate: yes
     restart_policy: always
     volumes:
       - ~/gitea:/data
