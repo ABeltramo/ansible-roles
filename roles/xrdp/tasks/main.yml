@@ -1,13 +1,13 @@
 - name: Gather package facts
   package_facts:
     manager: apt
+  when: ansible_facts.packages is not defined
 
 - name: "Install xrdp"
   apt:
     name: [xrdp]
     update_cache: yes
   when: '"xrdp" not in ansible_facts.packages'
-
 
 # See https://github.com/sddm/sddm/issues/323
 - name: Reduce sddm-greeter cpu usage on idle

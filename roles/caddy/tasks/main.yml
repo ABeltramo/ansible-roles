@@ -1,11 +1,11 @@
 - docker_volume:
     name: caddy-volume
     state: present
-    force: no
+    recreate: never
 
 - name: "Copy Caddy config"
   template:
-    src: Caddyfile
+    src: Caddyfile.j2
     dest: "{{ DOCKER.host_path }}/Caddyfile"
 
 - name: "Create caddy external network"
@@ -18,18 +18,17 @@
     image: abiosoft/caddy:no-stats
     pull: true
     state: started
-    recreate: yes
     restart_policy: always
+    recreate: no
+    container_default_behavior: "compatibility"
     env:
       ACME_AGREE: "true"
-      AWS_ACCESS_KEY_ID: "{{ AWS.access_key }}"
-      AWS_SECRET_ACCESS_KEY: "{{ AWS.secret }}"
+      AWS_ACCESS_KEY_ID: "{{ AWS.access_key | default(omit) }}"
+      AWS_SECRET_ACCESS_KEY: "{{ AWS.secret | default(omit) }}"
     ports:
       - "443:443"
     volumes:
       - "{{ DOCKER.host_path }}/Caddyfile:/etc/Caddyfile"
       - /etc/ssl/crt/ca.pem:/etc/ca.crt
       - caddy-volume:/root/.caddy
-    networks:
-      - name: "{{ DOCKER.net.caddy }}"
-    purge_networks: yes
+    network_mode: "{{ DOCKER.net.caddy }}"

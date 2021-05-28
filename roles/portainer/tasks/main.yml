@@ -1,7 +1,7 @@
 - docker_volume:
     name: portainer-volume
     state: present
-    force: no
+    recreate: never
 
 - name: "Start portainer"
   community.docker.docker_container:
@@ -9,17 +9,16 @@
     image: portainer/portainer-ce
     pull: true
     state: started
-    recreate: yes
+    recreate: no
     restart_policy: always
+    container_default_behavior: "compatibility"
     command: -H unix:///var/run/docker.sock
     ports:
       - "9000:9000"
     volumes:
       - portainer-volume:/data
       - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - name: "{{ DOCKER.net.traefik }}"
-    purge_networks: yes
+    network_mode: "{{ DOCKER.net.traefik | default('bridge') }}"
     labels:
       traefik.frontend.rule: "Host: {{ traefik.url }}"
       traefik.port: "9000"

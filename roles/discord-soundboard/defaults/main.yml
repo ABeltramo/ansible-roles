@@ -1,0 +1,12 @@
+soundboard_config:
+  language: 'en'
+  prefix: '!'
+  accepted_extensions: [".mp3", ".wav"]
+  maximum_file_size: 1000000,
+  volume: 1.0
+  delete_messages: false
+  stay_in_channel: false
+  timeout: 10
+  deafen: false
+  game: 'SoundBoard'
+  elevated_roles: ["admin"]

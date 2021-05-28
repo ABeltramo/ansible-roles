@@ -3,8 +3,8 @@
     name: telegraf
     image: "telegraf"
     state: started
-    recreate: yes
-    pull: yes
+    recreate: no
+    pull: no
     restart_policy: always
     volumes:
       - "{{ telegraf_folder }}telegraf.conf:/etc/telegraf/telegraf.conf:ro"

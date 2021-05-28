@@ -12,7 +12,7 @@
       PGID: "0"
       PUID: "0"
     volumes:
-      - /mnt/data/youtube-dl:/home/app/public/temp
+      - "{{ DOCKER.host_path }}/youtube-dl:/home/app/public/temp"
     networks:
       - name: "{{ DOCKER.net.traefik }}"
     purge_networks: yes

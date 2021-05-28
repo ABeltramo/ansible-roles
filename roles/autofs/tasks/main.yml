@@ -1,6 +1,7 @@
 - name: Gather package facts
   package_facts:
     manager: apt
+  when: ansible_facts.packages is not defined
 
 - name: "Install autofs"
   apt:

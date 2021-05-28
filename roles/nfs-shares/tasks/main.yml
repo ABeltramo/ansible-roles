@@ -1,4 +1,4 @@
-- name: Mount disks
+- name: Mount local disks
   mount:
     path: "{{ item.path }}"
     src: "UUID={{ item.uuid }}"
@@ -13,7 +13,7 @@
     update_cache: yes
   when: host_nfs_shares is defined
 
-- name: Mount share
+- name: Mount NFS share
   mount:
     path: "{{ item.path }}"
     src: "{{ item.name }}"

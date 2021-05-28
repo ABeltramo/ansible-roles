@@ -11,20 +11,20 @@
 
 - name: Copy config.js file
   template:
-    src: "config.json"
+    src: "config.j2"
     dest: "{{ DOCKER.host_path }}/discord-sb/config.json"
 
-- name: "Start Discord sound board"
+- name: Start Discord sound board
   community.docker.docker_container:
     name: discord-sb
     image: abeltramo/discord-soundbot
     pull: true
     state: started
-    recreate: yes
+    recreate: no
     restart_policy: always
-    networks:
-      - name: "{{ DOCKER.net.caddy }}"
-    purge_networks: yes
+    network_mode: "{{ DOCKER.net.traefik }}"
+    purge_networks: no
+    container_default_behavior: "compatibility"
     volumes:
       - "{{ DOCKER.host_path }}/discord-sb/sounds:/app/sounds"
       - "{{ DOCKER.host_path }}/discord-sb/db.json:/app/db.json"

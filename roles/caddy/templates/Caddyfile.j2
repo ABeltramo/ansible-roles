@@ -1,0 +1,7 @@
+{% for url,port,options in CADDY.hosts %}
+
+{{ url }}:{{ port }} {
+  {{ options }}
+}
+
+{% endfor %}
