@@ -7,6 +7,7 @@
 - name: Gather package facts
   package_facts:
     manager: apt
+  when: ansible_facts.packages is not defined
 
 - name: Create Telegraf configuration
   template:

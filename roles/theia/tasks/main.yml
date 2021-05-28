@@ -17,5 +17,5 @@
     volumes:
       - theia-project:/home/project:cached
     networks:
-      - name: "{{ DOCKER.net.caddy }}"
+      - name: "{{ DOCKER.net.traefik }}"
     purge_networks: yes

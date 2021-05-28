@@ -1,0 +1,32 @@
+- name: ensure traefik local folder exists
+  file:
+    path: "{{ DOCKER.host_path }}/traefik/"
+    recurse: yes
+    state: directory
+
+- name: "Copy Traefik config"
+  template:
+    src: traefik.toml
+    dest: "{{ DOCKER.host_path }}/traefik.toml"
+
+- name: "Create traefik network"
+  docker_network:
+    name: "{{ DOCKER.net.traefik }}"
+
+- name: "Start Traefik"
+  community.docker.docker_container:
+    name: traefik-local
+    image: traefik:1.7
+    pull: false
+    state: started
+    recreate: no
+    restart_policy: always
+    purge_networks: no
+    container_default_behavior: "compatibility"
+    ports:
+      - "80:80"
+    #      - "8080:8080"
+    volumes:
+      - "{{ DOCKER.host_path }}/traefik.toml:/etc/traefik/traefik.toml"
+      - /var/run/docker.sock:/var/run/docker.sock
+    network_mode: "{{ DOCKER.net.traefik }}"

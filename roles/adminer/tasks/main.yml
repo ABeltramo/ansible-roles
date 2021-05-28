@@ -11,7 +11,7 @@
     repo: https://github.com/Niyko/Hydra-Dark-Theme-for-Adminer.git
     dest: "{{ DOCKER.host_path }}/adminer/hydra"
     update: yes
-  become: n
+  become: no
 
 - name: "Start adminer"
   community.docker.docker_container:
@@ -21,7 +21,8 @@
     state: started
     recreate: yes
     restart_policy: always
-    purge_networks: yes
+    purge_networks: no
+    container_default_behavior: "compatibility"
     env:
       ADMINER_DEFAULT_SERVER: "{{ SQL.host }}"
     volumes:

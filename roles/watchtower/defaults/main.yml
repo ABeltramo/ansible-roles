@@ -1,0 +1,7 @@
+watchtower_env:
+  WATCHTOWER_NO_STARTUP_MESSAGE: "true"
+  WATCHTOWER_INCLUDE_STOPPED: "1"       # Include stopped containers
+  WATCHTOWER_CLEANUP: "1"               # Delete unused image
+  #                     seconds           minutes           h D M d
+  WATCHTOWER_SCHEDULE: "{{ 59 | random }} {{ 59 | random }} 1 * * 6" # Run on Saturday morning at 1 AM
+  WATCHTOWER_DEBUG: "true"

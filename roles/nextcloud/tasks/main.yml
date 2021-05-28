@@ -39,13 +39,13 @@
           depends_on:
             - redis
           networks:
-            - CADDY
+            - NET
             - DBMS
 
       networks:
-        CADDY:
+        NET:
           external:
-            name: "{{ DOCKER.net.caddy }}"
+            name: "{{ DOCKER.net.traefik }}"
         DBMS:
           external:
             name: "{{ DOCKER.net.dbms }}"

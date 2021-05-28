@@ -1,35 +1,18 @@
-- name: "Start cloudflare-ddns container with healthchecks"
+- name: "Start cloudflare-ddns container"
   community.docker.docker_container:
     name: cloudflare-ddns
     image: abeltramo/cloudflare-ddns:latest
     pull: true
     state: started
-    recreate: yes
+    recreate: no
     restart_policy: always
+    container_default_behavior: "compatibility"
     env:
       AUTH_EMAIL: "{{ cloudflare.auth_email }}"
       AUTH_KEY: "{{ cloudflare.auth_key }}"
       ZONE_IDENTIFIER: "{{ cloudflare.zone_identifier }}"
       RECORD_NAME: "{{ external_domain_name }}"
-      HEALTHCHECK_START_URL: "{{ HEALTHCHECK.url }}/{{ HEALTHCHECK.id }}/start"
-      HEALTHCHECK_END_URL: "{{ HEALTHCHECK.url }}/{{ HEALTHCHECK.id }}"
-    networks:
-      - name: "{{ DOCKER.net.traefik }}"
-    purge_networks: yes
-  when: HEALTHCHECK is defined
-
-- name: "Start cloudflare-ddns container without healthchecks"
-  community.docker.docker_container:
-    name: cloudflare-ddns
-    image: abeltramo/cloudflare-ddns:latest
-    pull: true
-    state: started
-    recreate: yes
-    restart_policy: always
-    env:
-      AUTH_EMAIL: "{{ cloudflare.auth_email }}"
-      AUTH_KEY: "{{ cloudflare.auth_key }}"
-      ZONE_IDENTIFIER: "{{ cloudflare.zone_identifier }}"
-      RECORD_NAME: "{{ external_domain_name }}"
-    network_mode: bridge
-  when: HEALTHCHECK is not defined
+      HEALTHCHECK_START_URL: "{{ HEALTHCHECK.url + '/' + HEALTHCHECK.id + '/start' | default(omit) }}"
+      HEALTHCHECK_END_URL: "{{ HEALTHCHECK.url + '/' + HEALTHCHECK.id | default(omit) }}"
+    network_mode: "{{ DOCKER.net.traefik | default('bridge') }}"
+    purge_networks: no

@@ -1,3 +1,8 @@
+- name: "Combine defaults and watchtower_config_override variables"
+  set_fact:
+    wtw_combined_env: "{{ watchtower_env | combine(watchtower_config_override) }}"
+
+
 - community.docker.docker_container:
     name: watchtower
     image: containrrr/watchtower
@@ -8,18 +13,17 @@
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     env:
-      WATCHTOWER_NOTIFICATIONS: "email"
-      WATCHTOWER_NOTIFICATION_EMAIL_FROM: "{{ machine_name }}@{{ email_from }}"
-      WATCHTOWER_NOTIFICATION_EMAIL_TO: "{{ email_to }}"
-      WATCHTOWER_NOTIFICATION_EMAIL_SERVER: "{{ mail.server }}"
-      WATCHTOWER_NOTIFICATION_EMAIL_SERVER_USER: "{{ mail.user }}"
-      WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PASSWORD: "{{ mail.password }}"
-      WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PORT: "{{ mail.port }}"
-      WATCHTOWER_NOTIFICATION_EMAIL_SUBJECTTAG: "{{ machine_name }}"
-      WATCHTOWER_NOTIFICATION_EMAIL_DELAY: "2"
-      WATCHTOWER_NO_STARTUP_MESSAGE: "true"
-      WATCHTOWER_INCLUDE_STOPPED: "1"       # Include stopped containers
-      WATCHTOWER_CLEANUP: "1"               # Delete unused image
-      #                     seconds           minutes           h D M d
-      WATCHTOWER_SCHEDULE: "{{ 59 | random }} {{ 59 | random }} 1 * * 6" # Run on Saturday morning at 1 AM
-      WATCHTOWER_DEBUG: "true"
+      WATCHTOWER_NOTIFICATIONS: "{{ wtw_combined_env.WATCHTOWER_NOTIFICATIONS | default(omit) }}"
+      WATCHTOWER_NOTIFICATION_EMAIL_FROM: "{{ wtw_combined_env.WATCHTOWER_NOTIFICATION_EMAIL_FROM | default(omit) }}"
+      WATCHTOWER_NOTIFICATION_EMAIL_TO: "{{ wtw_combined_env.WATCHTOWER_NOTIFICATION_EMAIL_TO | default(omit) }}"
+      WATCHTOWER_NOTIFICATION_EMAIL_SERVER: "{{ wtw_combined_env.WATCHTOWER_NOTIFICATION_EMAIL_SERVER | default(omit) }}"
+      WATCHTOWER_NOTIFICATION_EMAIL_SERVER_USER: "{{ wtw_combined_env.WATCHTOWER_NOTIFICATION_EMAIL_SERVER_USER | default(omit) }}"
+      WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PASSWORD: "{{ wtw_combined_env.WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PASSWORD | default(omit) }}"
+      WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PORT: "{{ wtw_combined_env.WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PORT | default(omit) }}"
+      WATCHTOWER_NOTIFICATION_EMAIL_SUBJECTTAG: "{{ wtw_combined_env.WATCHTOWER_NOTIFICATION_EMAIL_SUBJECTTAG | default(omit) }}"
+      WATCHTOWER_NOTIFICATION_EMAIL_DELAY: "{{ wtw_combined_env.WATCHTOWER_NOTIFICATION_EMAIL_DELAY | default(omit) }}"
+      WATCHTOWER_NO_STARTUP_MESSAGE: "{{ wtw_combined_env.WATCHTOWER_NO_STARTUP_MESSAGE | default(omit) }}"
+      WATCHTOWER_INCLUDE_STOPPED: "{{ wtw_combined_env.WATCHTOWER_INCLUDE_STOPPED | default(omit) }}"
+      WATCHTOWER_CLEANUP: "{{ wtw_combined_env.WATCHTOWER_CLEANUP | default(omit) }}"
+      WATCHTOWER_SCHEDULE: "{{ wtw_combined_env.WATCHTOWER_SCHEDULE | default(omit) }}"
+      WATCHTOWER_DEBUG: "{{ wtw_combined_env.WATCHTOWER_DEBUG | default(omit) }}"
