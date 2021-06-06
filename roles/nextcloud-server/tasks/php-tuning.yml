@@ -1,0 +1,62 @@
+# PHP Tuning
+# See: https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/big_file_upload_configuration.html
+
+- name: PHP Tuning
+  block:
+    - name: PHP Tuning - Change max memory usage
+      lineinfile:
+        path: /etc/php/7.4/fpm/php.ini
+        regexp: '^memory_limit'
+        line: memory_limit = 1024M
+
+    - name: PHP Tuning - Change max upload size
+      lineinfile:
+        path: /etc/php/7.4/fpm/php.ini
+        regexp: '^upload_max_filesize = '
+        line: upload_max_filesize = 1024M
+
+    - name: PHP Tuning - Change max post size
+      lineinfile:
+        path: /etc/php/7.4/fpm/php.ini
+        regexp: '^post_max_size = '
+        line: post_max_size = 1024M
+
+    - name: PHP Tuning - Change max input time
+      lineinfile:
+        path: /etc/php/7.4/fpm/php.ini
+        regexp: '^max_input_time = '
+        line: max_input_time = 3600
+
+    - name: PHP Tuning - Change max execution time
+      lineinfile:
+        path: /etc/php/7.4/fpm/php.ini
+        regexp: '^max_execution_time = '
+        line: max_execution_time = 3600
+
+    - name: PHP Tuning - Ensure clear_env = no
+      lineinfile:
+        path: /etc/php/7.4/fpm/pool.d/www.conf
+        regexp: '^clear_env'
+        line: clear_env = no
+
+    - name: OPCache
+      community.general.ini_file:
+        path: /etc/php/7.4/fpm/php.ini
+        section: opcache
+        option: "{{ item.option }}"
+        value: "{{ item.value }}"
+        backup: no
+        state: present
+      with_items: # Taken from https://www.scalingphpbook.com/blog/2014/02/14/best-zend-opcache-settings.html
+        - { option: "opcache.enable", value: "1" }
+        - { option: "opcache.revalidate_freq", value: "0" }
+        - { option: "opcache.validate_timestamps", value: "0" }
+        - { option: "opcache.max_accelerated_files", value: "10000" }
+        - { option: "opcache.memory_consumption", value: "192" }
+        - { option: "opcache.interned_strings_buffer", value: "16" }
+        - { option: "opcache.fast_shutdown", value: "1" }
+
+- name: "Restart php-fpm"
+  service:
+    name: php7.4-fpm
+    state: restarted

@@ -1,0 +1,25 @@
+- name: "Install Nginx"
+  apt:
+    name:
+      - nginx
+
+- name: Create Nginx configuration
+  template:
+    src: "nginx.conf"
+    dest: "/etc/nginx/sites-available/nextcloud"
+
+- name: Create a symlink in sites-enabled
+  file:
+    src: /etc/nginx/sites-available/nextcloud
+    dest: /etc/nginx/sites-enabled/nextcloud
+    state: link
+
+- name: Remove default nginx site
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: "Restart Nginx"
+  service:
+    name: nginx
+    state: restarted

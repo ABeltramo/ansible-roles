@@ -9,8 +9,8 @@ $CONFIG = array(
     ),
     'datadirectory' => '{{ nextcloud_data }}',
     'instanceid' => 'oc5smchsv2g0',
-    'passwordsalt' => '{{ salt }}',
-    'secret' => '{{ secret }}',
+    'passwordsalt' => '{{ salt | default(lookup('password', '/dev/null length=30 chars=ascii_letters')) }}',
+    'secret' => '{{ secret | default(lookup('password', '/dev/null length=45 chars=ascii_letters')) }}',
     'trusted_domains' =>
         array(
             0 => '{{ public_host }}',

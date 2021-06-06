@@ -1,0 +1,44 @@
+- name: "Gather facts"
+  gather_facts:
+  when: 'ansible_distribution_release is not defined'
+
+- name: "Install basic GPG packages"
+  apt:
+    name:
+      - gnupg2
+    update_cache: yes
+
+- name: Import Sury GPG signing key [Debian/Ubuntu]
+  apt_key:
+    url: "https://packages.sury.org/php/apt.gpg"
+    id: 15058500A0235D97F5D10063B188E2B695BD4743
+    state: present
+
+- name: Add Sury repository [Debian/Ubuntu]
+  apt_repository:
+    repo: deb https://packages.sury.org/php/ {{ ansible_distribution_release }} main
+    state: present
+
+- name: "Update repositories and install packages"
+  apt:
+    name:
+      - curl
+      - php7.4-fpm
+      - php7.4-gd
+      - php7.4-mysql
+      - php7.4-curl
+      - php7.4-mbstring
+      - php7.4-intl
+      - php7.4-gmp
+      - php7.4-bcmath
+      - php-imagick
+      - php7.4-xml
+      - php7.4-zip
+      - php7.4-redis
+      - php7.4-bz2
+      - php7.4-json
+      - php7.4-imagick
+      - php7.4-apcu
+      - imagemagick
+      - unzip
+    update_cache: yes
