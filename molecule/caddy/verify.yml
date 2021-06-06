@@ -1,0 +1,30 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+
+    - name: is Caddy running?
+      block:
+        - name: Get caddy container status
+          community.docker.docker_container_info:
+            name: caddy
+          register: caddy_container
+
+        - name: Assert that Caddy container exists
+          assert:
+            that: caddy_container.exists
+
+    - name: Test Caddyfile is present
+      block:
+        - name: Caddyfile - retrieve information from path '{{ DOCKER.host_path }}/Caddyfile'
+          stat:
+            path: "{{ DOCKER.host_path }}/Caddyfile"
+          register: remote_file
+
+        - name: Caddyfile - assert that '{{ DOCKER.host_path }}/Caddyfile' file is created correctly
+          assert:
+            that:
+              - "remote_file.stat.exists"
+              - "remote_file.stat.isreg" # is a regular file
+              - "remote_file.stat.path == '{{ DOCKER.host_path }}/Caddyfile'"

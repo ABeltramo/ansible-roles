@@ -1,0 +1,25 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: debian_buster
+    image: geerlingguy/docker-debian10-ansible:latest # https://ansible.jeffgeerling.com/
+    pre_build_image: true
+    command: ""
+    capabilities:
+      - SYS_ADMIN
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+provisioner:
+  name: ansible
+  inventory:
+    host_vars:
+      debian_buster:
+        DOCKER:
+          host_path: "/tmp/docker"
+          net:
+            traefik: "traefik-network"
+verifier:
+  name: ansible

@@ -1,0 +1,35 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+
+    - name: is traefik running?
+      block:
+        - name: Get traefik container status
+          community.docker.docker_container_info:
+            name: traefik-local
+          register: traefik_container
+
+        - name: Assert that traefik container exists
+          assert:
+            that: traefik_container.exists
+
+        - name: Is traefik replying to HTTP requests?
+          uri:
+            url: http://localhost/
+            status_code: 404 # Replies 404 since no other route is set
+
+    - name: Test traefik.toml is present
+      block:
+        - name: traefik.toml - retrieve information from path '{{ DOCKER.host_path }}/traefik.toml'
+          stat:
+            path: "{{ DOCKER.host_path }}/traefik.toml"
+          register: remote_file
+
+        - name: traefik.toml - assert that '{{ DOCKER.host_path }}/traefik.toml' file is created correctly
+          assert:
+            that:
+              - "remote_file.stat.exists"
+              - "remote_file.stat.isreg" # is a regular file
+              - "remote_file.stat.path == '{{ DOCKER.host_path }}/traefik.toml'"
