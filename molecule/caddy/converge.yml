@@ -1,0 +1,11 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "apt install python3-apt"
+      apt:
+        name: [ python3-apt ]
+
+    - name: "Include caddy"
+      include_role:
+        name: "caddy"
