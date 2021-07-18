@@ -21,6 +21,18 @@
         regexp: '^post_max_size = '
         line: post_max_size = 1024M
 
+    - name: PHP Tuning - Change GC probability
+      lineinfile:
+        path: /etc/php/7.4/fpm/php.ini
+        regexp: '^session.gc_probability = '
+        line: session.gc_probability = 1
+
+    - name: PHP Tuning - Change GC divisor
+      lineinfile:
+        path: /etc/php/7.4/fpm/php.ini
+        regexp: '^session.gc_divisor = '
+        line: session.gc_divisor = 100
+
     - name: PHP Tuning - Change max input time
       lineinfile:
         path: /etc/php/7.4/fpm/php.ini
