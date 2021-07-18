@@ -5,7 +5,7 @@
 - community.docker.docker_container:
     name: mysql
     state: started
-    image: mariadb
+    image: mariadb:10.5 # Keeping at 10.5 because of https://help.nextcloud.com/t/update-to-next-cloud-21-0-2-has-get-an-error/117028/13
     pull: true
     recreate: no
     restart_policy: always
