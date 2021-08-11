@@ -27,7 +27,7 @@
   docker_volume:
     name: "{{ item.name }}"
     state: present
-    recreate: never
+    recreate: options-changed
     driver: local
     driver_options:
       type: nfs

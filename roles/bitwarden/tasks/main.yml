@@ -1,7 +1,7 @@
 - name: "Start Bitwarden"
   community.docker.docker_container:
     name: bitwardenrs
-    image: bitwardenrs/server
+    image: vaultwarden/server
     pull: true
     state: started
     recreate: yes
@@ -9,7 +9,7 @@
     volumes:
       - "{{ DOCKER.host_path }}/bitwarden:/data/"
     env:
-      ADMIN_TOKEN: "{{ admin_token }}"
+      ADMIN_TOKEN: "{{ admin_token | default(omit) }}"
     labels:
       traefik.frontend.rule: "Host: {{ traefik.url }}"
       traefik.port: "80"
