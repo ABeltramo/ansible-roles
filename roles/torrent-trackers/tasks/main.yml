@@ -1,11 +1,12 @@
-- community.docker.docker_container:
+- name: "Start sonarr"
+  community.docker.docker_container:
     name: sonarr
     image: linuxserver/sonarr
     pull: true
     state: started
     restart_policy: always
     volumes:
-      - "{{ DOCKER.host_path }}/sonarr/config:/config"
+      - "{{ DOCKER.host_path }}/{{ sonarr_config | default('sonarr/config') }}:/config"
       - "{{ series_path }}:/tv"
       - "{{ torrent_path }}:/downloads"
     labels:
@@ -19,14 +20,17 @@
     purge_networks: yes
     networks:
       - name: "{{ DOCKER.net.traefik }}"
+  when: traefik.sonarr_url is defined
 
-- community.docker.docker_container:
+
+- name: "Start radarr"
+  community.docker.docker_container:
     name: radarr
     image: linuxserver/radarr
     state: started
     restart_policy: always
     volumes:
-      - "{{ DOCKER.host_path }}/radarr/config:/config"
+      - "{{ DOCKER.host_path }}/{{ radarr_config | default('radarr/config') }}:/config"
       - "{{ film_path }}:/movies"
       - "{{ torrent_path }}:/downloads"
     labels:
@@ -40,14 +44,17 @@
     purge_networks: yes
     networks:
       - name: "{{ DOCKER.net.traefik }}"
+  when: traefik.radarr_url is defined
 
-- community.docker.docker_container:
+
+- name: "Start bazarr"
+  community.docker.docker_container:
     name: bazarr
     image: linuxserver/bazarr
     state: started
     restart_policy: always
     volumes:
-      - "{{ DOCKER.host_path }}/bazarr/config:/config"
+      - "{{ DOCKER.host_path }}/{{ bazarr_config | default('bazarr/config') }}:/config"
       - "{{ film_path }}:/movies"
       - "{{ series_path }}:/tv"
     labels:
@@ -61,24 +68,27 @@
     purge_networks: yes
     networks:
       - name: "{{ DOCKER.net.traefik }}"
+  when: traefik.bazarr_url is defined
 
-#- community.docker.docker_container:
-#    name: lidarr
-#    image: linuxserver/lidarr
-#    state: started
-#    restart_policy: always
-#    volumes:
-#      - "{{ DOCKER.host_path }}/lidarr/config:/config"
-#      - "{{ music_path }}:/music"
-#      - "{{ torrent_path }}:/downloads"
-#    labels:
-#      traefik.frontend.rule: "Host: {{ traefik.url }}"
-#      traefik.port: "8686"
-#      traefik.enable: "true"
-#    env:
-#      TZ: 'Europe/London'
-#      PGID: "1000"
-#      PUID: "1000"
-#    purge_networks: yes
-#    networks:
-#      - name: "{{ DOCKER.net.traefik }}"
+- name: "Start lidarr"
+  community.docker.docker_container:
+    name: lidarr
+    image: linuxserver/lidarr
+    state: started
+    restart_policy: always
+    volumes:
+      - "{{ DOCKER.host_path }}/{{ lidarr_config | default('lidarr/config') }}:/config"
+      - "{{ music_path }}:/music"
+      - "{{ torrent_path }}:/downloads"
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "8686"
+      traefik.enable: "true"
+    env:
+      TZ: 'Europe/London'
+      PGID: "1000"
+      PUID: "1000"
+    purge_networks: yes
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+  when: traefik.lidarr_url is defined
