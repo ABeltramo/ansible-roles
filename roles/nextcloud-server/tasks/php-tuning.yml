@@ -27,11 +27,17 @@
         regexp: '^session.gc_probability = '
         line: session.gc_probability = 1
 
+    - name: PHP Tuning - Change GC Max lifetime
+      lineinfile:
+        path: /etc/php/7.4/fpm/php.ini
+        regexp: '^session.gc_maxlifetime = '
+        line: session.gc_maxlifetime = 1440
+
     - name: PHP Tuning - Change GC divisor
       lineinfile:
         path: /etc/php/7.4/fpm/php.ini
         regexp: '^session.gc_divisor = '
-        line: session.gc_divisor = 100
+        line: session.gc_divisor = 1000
 
     - name: PHP Tuning - Change max input time
       lineinfile:

@@ -47,7 +47,7 @@
       - "32414:32414/udp"
     env:
       TZ: 'Europe/London'
-      PLEX_CLAIM: "{{ claim }}"
+      PLEX_CLAIM: "{{ claim | default(omit)}}"
       ADVERTISE_IP: "{{ traefik.url }}"
       PUID: "1000"
       PGID: "1000"

@@ -9,7 +9,7 @@
       - "{{ series_path }}:/tv"
       - "{{ torrent_path }}:/downloads"
     labels:
-      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.frontend.rule: "Host: {{ traefik.sonarr_url }}"
       traefik.port: "8989"
       traefik.enable: "true"
     env:
@@ -30,7 +30,7 @@
       - "{{ film_path }}:/movies"
       - "{{ torrent_path }}:/downloads"
     labels:
-      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.frontend.rule: "Host: {{ traefik.radarr_url }}"
       traefik.port: "7878"
       traefik.enable: "true"
     env:
@@ -51,7 +51,7 @@
       - "{{ film_path }}:/movies"
       - "{{ series_path }}:/tv"
     labels:
-      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.frontend.rule: "Host: {{ traefik.bazarr_url }}"
       traefik.port: "6767"
       traefik.enable: "true"
     env:
