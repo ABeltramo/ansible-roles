@@ -1,0 +1,16 @@
+- community.docker.docker_container:
+    name: uptime-kuma
+    image: louislam/uptime-kuma:1
+    pull: true
+    state: started
+    recreate: yes
+    restart_policy: always
+    volumes:
+      - "{{ DOCKER.host_path }}/uptime-kuma:/app/data"
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "3001"
+      traefik.enable: "true"
+    purge_networks: yes
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"

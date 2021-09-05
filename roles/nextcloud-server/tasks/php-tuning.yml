@@ -57,6 +57,13 @@
         regexp: '^clear_env'
         line: clear_env = no
 
+    - name: PHP Tuning - enable memcache
+      lineinfile:
+        path: /etc/php/7.4/fpm/php.ini
+        regexp: '^apc.enable_cli'
+        line: apc.enable_cli = 1
+
+
     - name: OPCache
       community.general.ini_file:
         path: /etc/php/7.4/fpm/php.ini
