@@ -29,6 +29,13 @@
     path: /var/www/nextcloud
   register: nextcloud_www_folder
 
+- name: "Ensure Nextcloud log file exists"
+  file:
+    path: /var/log/nextcloud.log
+    state: file
+    owner: "www-data"
+    group: "www-data"
+
 - name: "Download and unzip Nextcloud {{ nextcloud_version }}"
   unarchive:
     src: "https://download.nextcloud.com/server/releases/nextcloud-{{ nextcloud_version }}.zip"
@@ -58,6 +65,19 @@
     minute: "*/30"
     job: "[ -x /usr/lib/php/sessionclean ] && if [ ! -d /run/systemd/system ]; then /usr/lib/php/sessionclean; fi"
     user: "root"
+
+
+# You should install the previewgenerator app on Nextcloud
+# And also run
+# php ./occ config:app:set --value="32 64 256 1024 1920"  previewgenerator squareSizes
+# php ./occ config:app:set --value="64 128 1024 1080 2030" previewgenerator widthSizes
+# php ./occ config:app:set --value="64 256 1024 1080 1920" previewgenerator heightSizes
+- name: "CRON: Nextcloud preview generation"
+  cron:
+    name: "Nextcloud preview generation"
+    minute: "*/10"
+    job: "php /var/www/nextcloud/occ preview:pre-generate"
+    user: "www-data"
 
 - name: "Install NGINX if missing"
   import_tasks: "nginx.yml"

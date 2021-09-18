@@ -57,12 +57,18 @@
         regexp: '^clear_env'
         line: clear_env = no
 
-    - name: PHP Tuning - enable memcache
-      lineinfile:
-        path: /etc/php/7.4/fpm/php.ini
-        regexp: '^apc.enable_cli'
-        line: apc.enable_cli = 1
-
+    # See: https://github.com/nextcloud/server/issues/27781
+    - name: APCU Fix
+      community.general.ini_file:
+        section: null
+        path: /etc/php/7.4/mods-available/apcu.ini
+        option: "{{ item.option }}"
+        value: "{{ item.value }}"
+        backup: no
+        state: present
+      with_items:
+        - { option: "apc.enable_cli", value: "1" }
+        - { option: "apc.shm_size", value: "64M" }
 
     - name: OPCache
       community.general.ini_file:
@@ -80,13 +86,6 @@
         - { option: "opcache.memory_consumption", value: "192" }
         - { option: "opcache.interned_strings_buffer", value: "16" }
         - { option: "opcache.fast_shutdown", value: "1" }
-
-- name: "Cronjob php session cleaner"
-  ansible.builtin.cron:
-    name: "php-sessionclean"
-    minute: "29"
-    hour: "*"
-    job: "/usr/lib/php/sessionclean"
 
 - name: "Restart php-fpm"
   service:
