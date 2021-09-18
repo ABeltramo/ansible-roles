@@ -1,0 +1,14 @@
+- community.docker.docker_container:
+    name: libreddit
+    image: spikecodes/libreddit
+    pull: true
+    state: started
+    recreate: yes
+    restart_policy: always
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "8080"
+      traefik.enable: "true"
+    purge_networks: yes
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
