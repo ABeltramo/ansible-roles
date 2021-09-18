@@ -40,5 +40,7 @@
       - php7.4-imagick
       - php7.4-apcu
       - imagemagick
+      - imagemagick-common
+      - ffmpeg
       - unzip
     update_cache: yes
