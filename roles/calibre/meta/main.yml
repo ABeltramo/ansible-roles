@@ -1,5 +1,4 @@
 dependencies:
   - role: docker
   - role: traefik
-  - role: mariadb-create-db-user
   - role: nfs-shares

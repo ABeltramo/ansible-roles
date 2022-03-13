@@ -13,14 +13,21 @@
     update_cache: yes
   when: host_nfs_shares is defined
 
+#- name: Mount NFS share
+#  mount:
+#    path: "{{ item.path }}"
+#    src: "{{ item.name }}"
+#    fstype: nfs
+#    opts: rw,async,hard,intr,noexec
+#    state: mounted
+#  with_items: "{{ host_nfs_shares }}"
+#  when: host_nfs_shares is defined
+
 - name: Mount NFS share
-  mount:
-    path: "{{ item.path }}"
-    src: "{{ item.name }}"
-    fstype: nfs
-    opts: rw,async,hard,intr,noexec
-    state: mounted
-  with_items: "{{ host_nfs_shares }}"
+  include_role:
+    name: robertdebock.autofs
+  vars:
+    autofs_maps: "{{ host_nfs_shares }}"
   when: host_nfs_shares is defined
 
 - name: "Creating docker volumes"
