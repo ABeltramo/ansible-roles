@@ -1,3 +1,5 @@
 collections:
   - community.docker
   - community.general
+roles:
+  - robertdebock.autofs

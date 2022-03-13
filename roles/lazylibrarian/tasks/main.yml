@@ -6,9 +6,9 @@
     recreate: yes
     restart_policy: always
     volumes:
-      - ~/lazylibrarian/config:/config
-      - /mnt/data/books:/books
-      - /mnt/data/torrent:/downloads
+      - "{{ DOCKER.host_path }}/{{ sonarr_config | default('lazylibrarian/config') }}:/config"
+      - "{{ books_path }}:/books"
+      - "{{ torrent_path }}:/downloads"
     env:
       DOCKER_MODS: "linuxserver/calibre-web:calibre"
       TZ: "Europe/London"

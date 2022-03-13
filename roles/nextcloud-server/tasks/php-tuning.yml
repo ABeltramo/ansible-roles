@@ -3,59 +3,30 @@
 
 - name: PHP Tuning
   block:
-    - name: PHP Tuning - Change max memory usage
-      lineinfile:
-        path: /etc/php/7.4/fpm/php.ini
-        regexp: '^memory_limit'
-        line: memory_limit = 1024M
-
-    - name: PHP Tuning - Change max upload size
-      lineinfile:
-        path: /etc/php/7.4/fpm/php.ini
-        regexp: '^upload_max_filesize = '
-        line: upload_max_filesize = 1024M
-
-    - name: PHP Tuning - Change max post size
-      lineinfile:
-        path: /etc/php/7.4/fpm/php.ini
-        regexp: '^post_max_size = '
-        line: post_max_size = 1024M
-
-    - name: PHP Tuning - Change GC probability
-      lineinfile:
-        path: /etc/php/7.4/fpm/php.ini
-        regexp: '^session.gc_probability = '
-        line: session.gc_probability = 1
-
-    - name: PHP Tuning - Change GC Max lifetime
-      lineinfile:
-        path: /etc/php/7.4/fpm/php.ini
-        regexp: '^session.gc_maxlifetime = '
-        line: session.gc_maxlifetime = 1440
-
-    - name: PHP Tuning - Change GC divisor
-      lineinfile:
-        path: /etc/php/7.4/fpm/php.ini
-        regexp: '^session.gc_divisor = '
-        line: session.gc_divisor = 1000
-
-    - name: PHP Tuning - Change max input time
-      lineinfile:
-        path: /etc/php/7.4/fpm/php.ini
-        regexp: '^max_input_time = '
-        line: max_input_time = 3600
-
-    - name: PHP Tuning - Change max execution time
-      lineinfile:
-        path: /etc/php/7.4/fpm/php.ini
-        regexp: '^max_execution_time = '
-        line: max_execution_time = 3600
-
     - name: PHP Tuning - Ensure clear_env = no
       lineinfile:
         path: /etc/php/7.4/fpm/pool.d/www.conf
         regexp: '^clear_env'
         line: clear_env = no
+
+    - name: PHP ini tuning
+      community.general.ini_file:
+        section: null
+        path: /etc/php/7.4/mods-available/apcu.ini
+        option: "{{ item.option }}"
+        value: "{{ item.value }}"
+        backup: no
+        state: present
+      with_items:
+        - { option: "max_execution_time", value: "3600" }
+        - { option: "max_input_time", value: "3600" }
+        - { option: "session.gc_divisor", value: "1000" }
+        - { option: "session.gc_maxlifetime", value: "1440" }
+        - { option: "session.gc_probability", value: "1" }
+        - { option: "post_max_size", value: "1024M" }
+        - { option: "upload_max_filesize", value: "1024M" }
+        - { option: "memory_limit", value: "1024M" }
+        - { option: "output_buffering", value: "0" }
 
     # See: https://github.com/nextcloud/server/issues/27781
     - name: APCU Fix
