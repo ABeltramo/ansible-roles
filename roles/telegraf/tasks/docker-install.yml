@@ -1,11 +1,20 @@
+# Influx will not run as root but with his own user
+# We have to assign the docker user to it in order to get access to the docker socket
+# see: https://www.influxdata.com/blog/docker-run-telegraf-as-non-root/
+- name: Get Docker socket user
+  shell: stat -c '%g' /var/run/docker.sock
+  register: docker_user
+
 - name: Start container Telegraf
   community.docker.docker_container:
     name: telegraf
     image: "telegraf"
     state: started
     recreate: no
+    restart: yes
     pull: no
     restart_policy: always
+    user: telegraf:{{ docker_user.stdout }}
     volumes:
       - "{{ telegraf_folder }}telegraf.conf:/etc/telegraf/telegraf.conf:ro"
       - "/:/hostfs:ro"

@@ -135,6 +135,16 @@
   urls = {{ telegraf_influxdb_server | to_json }}
 {% endif %}
 
+{% if telegraf_apcupsd_servers is defined %}
+[[inputs.apcupsd]]
+# A list of running apcupsd server to connect to.
+# If not provided will default to tcp://127.0.0.1:3551
+servers = {{ telegraf_apcupsd_servers | to_json }}
+
+## Timeout for dialing server.
+timeout = "{{ telegraf_apcupsd_timeout | default("5s") }}"
+{% endif %}
+
 {% if telegraf_mysql_server is defined %}
 [[inputs.mysql]]
   ## specify servers via a url matching:
