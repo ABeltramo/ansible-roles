@@ -1,0 +1,61 @@
+- name: "Start varken"
+  community.docker.docker_container:
+    name: varken
+    image: boerderij/varken:latest
+    pull: true
+    state: started
+    restart: yes
+    recreate: no
+    restart_policy: always
+    env: # see docs at: https://wiki.cajun.pro/books/varken/page/breakdown
+      TZ: Europe/London
+      VRKN_GLOBAL_SONARR_SERVER_IDS: "1"
+      VRKN_GLOBAL_RADARR_SERVER_IDS: "1"
+      VRKN_GLOBAL_TAUTULLI_SERVER_IDS: "1"
+      VRKN_GLOBAL_LIDARR_SERVER_IDS: "false"
+      VRKN_GLOBAL_OMBI_SERVER_IDS: "false"
+      VRKN_GLOBAL_SICKCHILL_SERVER_IDS: "false"
+      VRKN_GLOBAL_UNIFI_SERVER_IDS: "false"
+      VRKN_GLOBAL_MAXMIND_LICENSE_KEY: "{{ maxmind.license_key }}"
+      # Influx
+      VRKN_INFLUXDB_URL: "{{ influxdb.host }}"
+      VRKN_INFLUXDB_PORT: "8086"
+      VRKN_INFLUXDB_SSL: "false"
+      VRKN_INFLUXDB_VERIFY_SSL: "false"
+      VRKN_INFLUXDB_USERNAME: "{{ influxdb.username | default(omit) }}"
+      VRKN_INFLUXDB_PASSWORD: "{{ influxdb.password | default(omit) }}"
+      # Tautulli
+      VRKN_TAUTULLI_1_URL: "{{ tautulli.url | default(omit) }}"
+      VRKN_TAUTULLI_1_FALLBACK_IP: "{{ tautulli.fallback_ip | default(omit) }}"
+      VRKN_TAUTULLI_1_APIKEY: "{{ tautulli.api_key | default(omit) }}"
+      VRKN_TAUTULLI_1_SSL: "false"
+      VRKN_TAUTULLI_1_VERIFY_SSL: "false"
+      VRKN_TAUTULLI_1_GET_ACTIVITY: "true"
+      VRKN_TAUTULLI_1_GET_ACTIVITY_RUN_SECONDS: "30"
+      VRKN_TAUTULLI_1_GET_STATS: "true"
+      VRKN_TAUTULLI_1_GET_STATS_RUN_SECONDS: "3600"
+      # Sonarr
+      VRKN_SONARR_1_URL: "{{ sonarr.url | default(omit) }}"
+      VRKN_SONARR_1_APIKEY: "{{ sonarr.api_key | default(omit) }}"
+      VRKN_SONARR_1_SSL: "false"
+      VRKN_SONARR_1_VERIFY_SSL: "false"
+      VRKN_SONARR_1_MISSING_DAYS: "{{ sonarr.missing_days | default(7) }}"
+      VRKN_SONARR_1_MISSING_DAYS_RUN_SECONDS: "300"
+      VRKN_SONARR_1_FUTURE_DAYS: "{{ sonarr.future_days | default(1) }}"
+      VRKN_SONARR_1_FUTURE_DAYS_RUN_SECONDS: "300"
+      VRKN_SONARR_1_QUEUE: "true"
+      VRKN_SONARR_1_QUEUE_RUN_SECONDS: "300"
+      # Radarr
+      VRKN_RADARR_1_URL: "{{ radarr.url | default(omit) }}"
+      VRKN_RADARR_1_APIKEY: "{{ radarr.api_key | default(omit) }}"
+      VRKN_RADARR_1_SSL: "false"
+      VRKN_RADARR_1_VERIFY_SSL: "false"
+      VRKN_RADARR_1_QUEUE: "true"
+      VRKN_RADARR_1_QUEUE_RUN_SECONDS: "300"
+      VRKN_RADARR_1_GET_MISSING: "true"
+      VRKN_RADARR_1_GET_MISSING_RUN_SECONDS: "300"
+    volumes:
+      - "{{ DOCKER.host_path }}/varken:/config"
+    purge_networks: yes
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
