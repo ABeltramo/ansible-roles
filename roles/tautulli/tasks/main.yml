@@ -1,0 +1,22 @@
+- name: "Start tautulli"
+  community.docker.docker_container:
+    name: tautulli
+    image: ghcr.io/tautulli/tautulli:latest
+    pull: true
+    state: started
+    restart: yes
+    recreate: no
+    restart_policy: always
+    env:
+      TZ: Europe/London
+      PUID: "1000"
+      PGID: "1000"
+    volumes:
+      - "{{ DOCKER.host_path }}/tautulli:/config"
+    purge_networks: yes
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "8181"
+      traefik.enable: "true"
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
