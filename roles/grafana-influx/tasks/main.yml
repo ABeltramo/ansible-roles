@@ -30,7 +30,6 @@
     image: "grafana/grafana"
     state: started
     recreate: yes
-    recreate: yes
     pull: yes
     restart_policy: always
     env:

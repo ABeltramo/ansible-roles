@@ -23,22 +23,21 @@
   apt:
     name:
       - curl
-      - php7.4-fpm
-      - php7.4-gd
-      - php7.4-mysql
-      - php7.4-curl
-      - php7.4-mbstring
-      - php7.4-intl
-      - php7.4-gmp
-      - php7.4-bcmath
-      - php-imagick
-      - php7.4-xml
-      - php7.4-zip
-      - php7.4-redis
-      - php7.4-bz2
-      - php7.4-json
-      - php7.4-imagick
-      - php7.4-apcu
+      - "php{{ php_version }}-fpm"
+      - "php{{ php_version }}-gd"
+      - "php{{ php_version }}-mysql"
+      - "php{{ php_version }}-curl"
+      - "php{{ php_version }}-mbstring"
+      - "php{{ php_version }}-intl"
+      - "php{{ php_version }}-gmp"
+      - "php{{ php_version }}-bcmath"
+      - "php{{ php_version }}-xml"
+      - "php{{ php_version }}-zip"
+      - "php{{ php_version }}-redis"
+      - "php{{ php_version }}-bz2"
+#      - "php{{ php_version }}-json " # Removed as a module from 8.0
+      - "php{{ php_version }}-imagick"
+      - "php{{ php_version }}-apcu"
       - imagemagick
       - imagemagick-common
       - ffmpeg
