@@ -7,11 +7,11 @@
 
 - name: "Install PHP if missing"
   import_tasks: "php-install.yml"
-  when: '"php7.4-fpm" not in ansible_facts.packages'
+  when: 'php_package not in ansible_facts.packages'
 
 - name: "Ensure PHP is up and running"
   service:
-    name: php7.4-fpm
+    name: "php{{ php_version }}-fpm"
     state: started
 
 - name: "PHP Performance Tuning"
@@ -32,7 +32,7 @@
 - name: "Ensure Nextcloud log file exists"
   file:
     path: /var/log/nextcloud.log
-    state: file
+    state: touch
     owner: "www-data"
     group: "www-data"
 

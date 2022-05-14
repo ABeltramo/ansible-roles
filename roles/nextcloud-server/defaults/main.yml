@@ -1,2 +1,4 @@
-nextcloud_version: 21.0.1
+nextcloud_version: 23.0.4
+php_version: 8.0
+php_package: "php{{ php_version }}-fpm"
 tune_php: yes

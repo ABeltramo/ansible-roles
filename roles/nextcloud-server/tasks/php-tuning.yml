@@ -5,14 +5,14 @@
   block:
     - name: PHP Tuning - Ensure clear_env = no
       lineinfile:
-        path: /etc/php/7.4/fpm/pool.d/www.conf
+        path: "/etc/php/{{ php_version }}/fpm/pool.d/www.conf"
         regexp: '^clear_env'
         line: clear_env = no
 
     - name: PHP ini tuning
       community.general.ini_file:
         section: null
-        path: /etc/php/7.4/mods-available/apcu.ini
+        path: "/etc/php/{{ php_version }}/mods-available/apcu.ini"
         option: "{{ item.option }}"
         value: "{{ item.value }}"
         backup: no
@@ -32,7 +32,7 @@
     - name: APCU Fix
       community.general.ini_file:
         section: null
-        path: /etc/php/7.4/mods-available/apcu.ini
+        path: "/etc/php/{{ php_version }}/mods-available/apcu.ini"
         option: "{{ item.option }}"
         value: "{{ item.value }}"
         backup: no
@@ -43,7 +43,7 @@
 
     - name: OPCache
       community.general.ini_file:
-        path: /etc/php/7.4/fpm/php.ini
+        path: "/etc/php/{{ php_version }}/fpm/php.ini"
         section: opcache
         option: "{{ item.option }}"
         value: "{{ item.value }}"
@@ -60,5 +60,5 @@
 
 - name: "Restart php-fpm"
   service:
-    name: php7.4-fpm
+    name: "{{ php_package }}"
     state: restarted
