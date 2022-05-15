@@ -75,7 +75,7 @@
 - name: "CRON: Nextcloud preview generation"
   cron:
     name: "Nextcloud preview generation"
-    minute: "*/10"
+    minute: "*/30"
     job: "php /var/www/nextcloud/occ preview:pre-generate"
     user: "www-data"
 
