@@ -53,5 +53,19 @@ $CONFIG = array(
     'overwriteprotocol' => 'https',
     'overwrite.cli.url' => 'https://{{ public_host }}/',
     'overwritewebroot'  => '/',
-    'allow_local_remote_servers' => true
+    'allow_local_remote_servers' => true,
+    'localstorage.allowsymlinks' => true,
+{% if mail is defined %}
+    'mail_from_address' => '{{ mail.from_address | default('nextcloud') }}',
+    'mail_smtpmode' => 'smtp',
+    'mail_sendmailmode' => 'smtp',
+    'mail_domain' => '{{ mail.domain }}',
+    'mail_smtpauthtype' => 'LOGIN',
+    'mail_smtpauth' => 1,
+    'mail_smtphost' => '{{ mail.server }}',
+    'mail_smtpport' => '{{ mail.port }}',
+    'mail_smtpname' => '{{ mail.username }}',
+    'mail_smtppassword' => '{{ mail.password }}',
+    'mail_smtpsecure' => 'ssl',
+{% endif %}
 );
