@@ -66,6 +66,11 @@
     job: "[ -x /usr/lib/php/sessionclean ] && if [ ! -d /run/systemd/system ]; then /usr/lib/php/sessionclean; fi"
     user: "root"
 
+- name: "Register audit.log to be in /var/log/nextcloud-audit.log"
+  ansible.builtin.command:
+    cmd: "php /var/www/nextcloud/occ config:app:set admin_audit logfile --value=/var/log/nextcloud-audit.log"
+    creates: /var/log/nextcloud-audit.log
+  become_user: "www-data"
 
 # You should install the previewgenerator app on Nextcloud
 # And also run
