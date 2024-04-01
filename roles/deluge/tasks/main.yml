@@ -3,12 +3,16 @@
     path: "{{ torrent_path }}/complete/"
     recurse: yes
     state: directory
+    owner: 1000
+    group: 1000
 
 - name: Ensure torrent incomplete folder exists
   file:
     path: "{{ torrent_path }}/incomplete/"
     recurse: yes
     state: directory
+    owner: 1000
+    group: 1000
 
 - community.docker.docker_container:
     name: deluge

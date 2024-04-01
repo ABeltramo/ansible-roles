@@ -1,1 +1,68 @@
-TODO
+10.1.2.10 ghimli.lan
+10.1.2.4 gollum.lan
+10.1.2.2 gondor.lan
+10.1.1.12 golem.lan
+10.1.2.1 gandalf.lan
+10.1.2.3 sam.lan
+
+10.1.2.10 home.lan
+
+10.1.2.10 docker.lan
+10.1.2.10 bitwarden.lan
+10.1.2.10 bitcoin.lan
+10.1.2.10 calibre.lan
+10.1.2.10 netdata.lan
+10.1.2.10 backup.lan
+10.1.2.10 keycloak.lan
+10.1.2.10 shinobi.lan
+10.1.2.10 music.lan
+10.1.2.10 checks.lan
+10.1.2.10 wiki.lan
+10.1.2.10 speed.lan
+10.1.2.10 nodemation.lan
+10.1.2.10 guacamole.lan
+10.1.2.10 unifi.lan
+10.1.2.10 intellij.lan
+10.1.2.10 photos.lan
+10.1.2.10 api.builder.lan
+
+10.1.2.10 local.traefik.lan
+10.1.2.10 remote.traefik.lan
+
+10.1.2.4 torrent.lan
+10.1.2.4 tracker.download.lan
+10.1.2.4 serie.download.lan
+10.1.2.4 film.download.lan
+10.1.2.4 music.download.lan
+10.1.2.4 youtube.download.lan
+10.1.2.4 books.download.lan
+10.1.2.4 bazarr.download.lan
+
+10.1.2.10 agents.lan
+10.1.2.10 influx.lan
+10.1.2.10 grafana.lan
+
+10.1.2.10 api.builder.lan
+10.1.2.20 frodo.lan
+10.1.2.2 gondor.lan
+10.1.2.20 middle-earth.lan
+10.1.2.4 youtube.lan
+10.1.2.10 adminer.lan
+10.1.2.10 mysql.lan
+10.1.2.10 redis.lan
+10.1.2.10 fsync.lan
+10.1.2.16 nextcloud.lan
+10.1.2.16 nextcloud.lan
+10.1.2.10 neolink.lan
+10.1.2.10 soundbot.lan
+10.1.2.12 code.lan
+10.1.2.12 aragorn.lan
+10.1.2.49 winzozz.lan
+10.1.2.12 plex.lan
+10.1.2.4 film.download.ita.lan
+10.1.2.4 serie.download.ita.lan
+10.1.2.10 uptime.lan
+10.1.2.4 reddit.lan
+10.1.2.12 tautulli.lan
+10.1.2.12 lang.lan
+10.1.2.10 irc.lan

@@ -19,6 +19,8 @@
     path: "{{ transcoding_folder }}/transcode"
     state: directory
     mode: '0755'
+    owner: 1000
+    group: 1000
   become: no
 
 - name: Create cache directory
@@ -26,6 +28,8 @@
     path: "{{ transcoding_folder }}/cache"
     state: directory
     mode: '0755'
+    owner: 1000
+    group: 1000
   become: no
 
 - community.docker.docker_container:

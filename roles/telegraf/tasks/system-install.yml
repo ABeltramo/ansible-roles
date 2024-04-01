@@ -6,12 +6,12 @@
 
 - name: Import InfluxData GPG signing key [Debian/Ubuntu]
   apt_key:
-    url: "https://repos.influxdata.com/influxdb.key"
+    url: "https://repos.influxdata.com/influxdata-archive_compat.key"
     state: present
 
 - name: Add InfluxData repository [Debian/Ubuntu]
   apt_repository:
-    repo: deb https://repos.influxdata.com/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable
+    repo: deb https://repos.influxdata.com/debian stable main
     state: present
 
 - name: Install Telegraf packages [Debian/Ubuntu]

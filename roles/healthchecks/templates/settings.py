@@ -1,5 +1,5 @@
 EMAIL_HOST = "{{ mail.server }}"
-DEFAULT_FROM_EMAIL = "{{ machine_name }}@{{ mail.default_from }}"
+DEFAULT_FROM_EMAIL = "{{ machine_name }}@{{ mail.domain }}"
 EMAIL_PORT = "{{ mail.port }}"
 EMAIL_HOST_PASSWORD = "{{ mail.password }}"
 EMAIL_HOST_USER = "{{ mail.user }}"
