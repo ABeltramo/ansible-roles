@@ -70,6 +70,30 @@
       - name: "{{ DOCKER.net.traefik }}"
   when: traefik.bazarr_url is defined
 
+- name: "Start Sabnzbd"
+  community.docker.docker_container:
+    name: "{{ sabnzbd_container_name | default('sabnzbd')}}"
+    image: lscr.io/linuxserver/sabnzbd
+    state: started
+    restart_policy: always
+    volumes:
+      - "{{ DOCKER.host_path }}/{{ sabnzbd_config | default('sabnzbd/config') }}:/config"
+      - "{{ torrent_path }}:/downloads"
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.sabnzbd_url }}"
+      traefik.port: "8080"
+      traefik.enable: "true"
+    env:
+      TZ: 'Europe/London'
+      PGID: "1000"
+      PUID: "1000"
+    ports:
+      - 8080:8080
+    purge_networks: yes
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+  when: traefik.sabnzbd_url is defined
+
 - name: "Start lidarr"
   community.docker.docker_container:
     name: "{{ lidarr_container_name | default('lidarr')}}"

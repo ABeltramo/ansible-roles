@@ -26,6 +26,7 @@ $CONFIG = array(
             'OC\Preview\PDF'
         ),
     'datadirectory' => '{{ nextcloud_data }}',
+    'updatedirectory' => '{{ nextcloud_data }}/update-dir',
     'instanceid' => 'oc5smchsv2g0',
     'passwordsalt' => '{{ salt | default(lookup('password', '/dev/null length=30 chars=ascii_letters')) }}',
     'secret' => '{{ secret | default(lookup('password', '/dev/null length=45 chars=ascii_letters')) }}',
@@ -47,6 +48,9 @@ $CONFIG = array(
     "logfile" => "/var/log/nextcloud.log",
     "logfilemode" => 0640,
     "loglevel" => 1,
+    "log_type_audit" => "syslog",
+    "syslog_tag_audit" => "Nextcloud",
+    "logfile_audit" => "/var/log/nextcloud-audit.log",
     'logtimezone' => 'Europe/London',
     'default_phone_region' => 'IT',
     'overwritehost'     => '{{ public_host }}',
@@ -56,7 +60,7 @@ $CONFIG = array(
     'allow_local_remote_servers' => true,
     'localstorage.allowsymlinks' => true,
 {% if mail is defined %}
-    'mail_from_address' => '{{ mail.from_address | default('nextcloud') }}',
+    'mail_from_address' => '{{ mail.default_from | default('nextcloud') }}',
     'mail_smtpmode' => 'smtp',
     'mail_sendmailmode' => 'smtp',
     'mail_domain' => '{{ mail.domain }}',
@@ -64,7 +68,7 @@ $CONFIG = array(
     'mail_smtpauth' => 1,
     'mail_smtphost' => '{{ mail.server }}',
     'mail_smtpport' => '{{ mail.port }}',
-    'mail_smtpname' => '{{ mail.username }}',
+    'mail_smtpname' => '{{ mail.user }}',
     'mail_smtppassword' => '{{ mail.password }}',
     'mail_smtpsecure' => 'ssl',
 {% endif %}

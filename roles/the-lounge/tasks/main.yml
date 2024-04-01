@@ -1,0 +1,16 @@
+- community.docker.docker_container:
+    name: thelounge
+    image: thelounge/thelounge
+    pull: true
+    state: started
+    recreate: yes
+    restart_policy: always
+    volumes:
+      - "{{ DOCKER.host_path }}/thelounge:/var/opt/thelounge"
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "9000"
+      traefik.enable: "true"
+    purge_networks: yes
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"

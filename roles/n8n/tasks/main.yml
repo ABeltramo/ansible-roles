@@ -1,23 +1,17 @@
 - community.docker.docker_container:
     name: n8n
-    image: n8nio/n8n
+    image: n8nio/n8n:latest
     pull: true
     state: started
     recreate: yes
     restart_policy: always
     volumes:
-      - "{{ DOCKER.host_path }}/n8n:/root/.n8n"
+      - "{{ DOCKER.host_path }}/n8n:/home/node/.n8n"
     env:
       GENERIC_TIMEZONE: 'Europe/London'
       TZ: 'Europe/London'
       EXECUTIONS_DATA_PRUNE: "168"
       EXECUTIONS_DATA_SAVE_ON_SUCCESS: "none"
-      DB_TYPE: "mariadb"
-      DB_MYSQLDB_HOST: "{{ SQL.host }}"
-      DB_MYSQLDB_PORT: "{{ SQL.port }}"
-      DB_MYSQLDB_USER: "{{ SQL.user }}"
-      DB_MYSQLDB_PASSWORD: "{{ SQL.password }}"
-      DB_MYSQLDB_DATABASE: "{{ SQL.db }}"
       N8N_PROTOCOL: "http"
       N8N_HOST: "{{ traefik.url }}"
       WEBHOOK_TUNNEL_URL: "{{ traefik.url }}"

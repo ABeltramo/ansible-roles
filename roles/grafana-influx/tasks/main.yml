@@ -8,7 +8,6 @@
     image: "influxdb:1.8"
     state: started
     recreate: no
-    pull: yes
     restart_policy: always
     ports:
       - "8086:8086"
@@ -19,7 +18,7 @@
       - name: "{{ DOCKER.net.dbms }}"
     purge_networks: yes
     labels:
-      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.frontend.rule: "Host: {{ traefik.influx_url }}"
       traefik.port: "8086"
       traefik.enable: "true"
 
@@ -27,10 +26,9 @@
 - name: Start container Grafana
   community.docker.docker_container:
     name: grafana
-    image: "grafana/grafana"
+    image: "grafana/grafana:9.3.8" # 9.4.1 introduced a bug, see: https://github.com/grafana/grafana/issues/63973
     state: started
-    recreate: yes
-    pull: yes
+    recreate: no
     restart_policy: always
     env:
       GF_SECURITY_ADMIN_PASSWORD: "#H!Q>(?)RLb7dmr:"
@@ -39,10 +37,10 @@
       GF_SMTP_HOST: "{{ mail.server }}:{{ mail.port }}"
       GF_SMTP_USER: "{{ mail.user }}"
       GF_SMTP_PASSWORD: "{{ mail.password }}"
-      GF_SMTP_FROM_ADDRESS: "{{ mail_from }}"
+      GF_SMTP_FROM_ADDRESS: "{{ mail_from | default(omit) }}"
       # Database storage
       GF_DATABASE_TYPE: "mysql"
-      GF_DATABASE_HOST: "{{ SQL.host }}:{{ SQL.port }}"
+      GF_DATABASE_HOST: "{{ SQL.host }}:{{ SQL.port | default('3306') }}"
       GF_DATABASE_NAME: "{{ SQL.db }}"
       GF_DATABASE_USER: "{{ SQL.user }}"
       GF_DATABASE_PASSWORD: "{{ SQL.password }}"
@@ -59,6 +57,6 @@
       - name: "{{ DOCKER.net.dbms }}"
     purge_networks: yes
     labels:
-      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.frontend.rule: "Host: {{ traefik.grafana_url }}"
       traefik.port: "3000"
       traefik.enable: "true"

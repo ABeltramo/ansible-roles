@@ -22,12 +22,12 @@
     dest: "{{ DOCKER.host_path }}/pihole/etc-pihole/pihole-FTL.conf"
     mode: u=rw,g=r,o=r
 
-- community.docker.docker_container:
+- docker_container:
     name: pihole
-    image: pihole/pihole:v5.7
+    image: pihole/pihole:latest
     pull: false
     state: started
-    recreate: yes
+    restart: yes
     restart_policy: always
     ports:
       - '53:53/tcp'
@@ -39,15 +39,18 @@
       PROXY_LOCATION: pihole
       VIRTUAL_PORT: "80"
       TZ: 'Europe/London'
-      WEBPASSWORD: "{{ admin_password }}"
+      WEBPASSWORD: "alepollo93"
       VIRTUAL_HOST: pi.hole
       DNSMASQ_LISTENING: all
+    capabilities:
+      - NET_ADMIN
     volumes:
-      - "{{ DOCKER.host_path }}/pihole/etc-pihole/:/etc/pihole/"
-      - "{{ DOCKER.host_path }}/pihole/etc-dnsmasqd/:/etc/dnsmasq.d/"
+      - "{{ docker_volumes_path }}/pihole/etc-pihole/:/etc/pihole/"
+      - "{{ docker_volumes_path }}/pihole/etc-dnsmasqd/:/etc/dnsmasq.d/"
     networks:
-      - name: "{{ DOCKER.net.traefik }}"
+      - name: traefik-local
     labels:
+      com.centurylinklabs.watchtower.enable: "false" # Disable auto update
       # required when using --docker.exposedbydefault=false
       traefik.enable: "true"
       # https://www.techjunktrunk.com/docker/2017/11/03/traefik-default-server-catch-all/

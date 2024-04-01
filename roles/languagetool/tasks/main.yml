@@ -1,0 +1,32 @@
+- name: "Create /data/ folder"
+  file:
+    path: /data/languagetool/ngrams
+    recurse: yes
+    state: directory
+
+- name: "Downloading EN n-grams (~9GB)"
+  ansible.builtin.unarchive:
+    src: https://languagetool.org/download/ngram-data/ngrams-en-20150817.zip
+    dest: /data/languagetool/ngrams
+    creates: /data/languagetool/ngrams/en # Avoid downloading if already present
+    remote_src: yes
+
+- name: "Start Languagetool"
+  community.docker.docker_container:
+    name: languagetool
+    image: erikvl87/languagetool:5.7 # 5.8 was throwing an exception
+    pull: true
+    state: started
+    recreate: yes
+    restart_policy: always
+    env:
+      langtool_languageModel: "/ngrams"
+    volumes:
+     - /data/languagetool/ngrams:/ngrams:ro
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "8010"
+      traefik.enable: "true"
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+    purge_networks: yes

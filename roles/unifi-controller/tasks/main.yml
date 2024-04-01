@@ -16,7 +16,7 @@
       - 6789:6789 #optional
       - 5514:5514 #optional
     env:
-      MEM_LIMIT: "1024M"
+      MEM_LIMIT: "1024"
       PUID: "1000"
       PGID: "1000"
     volumes:
