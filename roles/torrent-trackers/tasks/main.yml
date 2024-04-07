@@ -7,8 +7,11 @@
     restart_policy: always
     volumes:
       - "{{ DOCKER.host_path }}/{{ sonarr_config | default('sonarr/config') }}:/config"
-      - "{{ series_path }}:/tv"
       - "{{ torrent_path }}:/downloads"
+    mounts:
+      - type: bind
+        source: "{{ series_path }}"
+        target: /tv
     labels:
       traefik.frontend.rule: "Host: {{ traefik.sonarr_url }}"
       traefik.port: "8989"
@@ -31,8 +34,11 @@
     restart_policy: always
     volumes:
       - "{{ DOCKER.host_path }}/{{ radarr_config | default('radarr/config') }}:/config"
-      - "{{ film_path }}:/movies"
       - "{{ torrent_path }}:/downloads"
+    mounts:
+      - type: bind
+        source: "{{ film_path }}"
+        target: /movies
     labels:
       traefik.frontend.rule: "Host: {{ traefik.radarr_url }}"
       traefik.port: "7878"
@@ -55,8 +61,13 @@
     restart_policy: always
     volumes:
       - "{{ DOCKER.host_path }}/{{ bazarr_config | default('bazarr/config') }}:/config"
-      - "{{ film_path }}:/movies"
-      - "{{ series_path }}:/tv"
+    mounts:
+      - type: bind
+        source: "{{ film_path }}"
+        target: /movies
+      - type: bind
+        source: "{{ series_path }}"
+        target: /tv
     labels:
       traefik.frontend.rule: "Host: {{ traefik.bazarr_url }}"
       traefik.port: "6767"
@@ -102,8 +113,11 @@
     restart_policy: always
     volumes:
       - "{{ DOCKER.host_path }}/{{ lidarr_config | default('lidarr/config') }}:/config"
-      - "{{ music_path }}:/music"
       - "{{ torrent_path }}:/downloads"
+    mounts:
+      - type: bind
+        source: "{{ music_path }}"
+        target: /music
     labels:
       traefik.frontend.rule: "Host: {{ traefik.url }}"
       traefik.port: "8686"
