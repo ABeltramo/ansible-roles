@@ -26,12 +26,3 @@
 - name: "Install python-pip"
   apt:
     name: [python3-pip]
-
-- name: "Install docker-py (used by Ansible to run remote docker)"
-  pip:
-    name: [virtualenv, setuptools, docker, docker-compose]
-
-- name: "Create {{ DOCKER.host_path }} folder"
-  file:
-    path: "{{ DOCKER.host_path }}"
-    state: directory
