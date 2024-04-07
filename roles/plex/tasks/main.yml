@@ -21,7 +21,7 @@
     mode: '0755'
     owner: 1000
     group: 1000
-  become: no
+  become: yes
 
 - name: Create cache directory
   file:
@@ -30,7 +30,7 @@
     mode: '0755'
     owner: 1000
     group: 1000
-  become: no
+  become: yes
 
 - community.docker.docker_container:
     name: plex

@@ -4,11 +4,6 @@
     recurse: yes
     state: directory
 
-- name: Copy python config file
-  template:
-    src: "settings.py"
-    dest: "{{ DOCKER.host_path }}/healthchecks/local_settings.py"
-
 - community.docker.docker_container:
     name: healthchecks
     image: linuxserver/healthchecks
@@ -24,6 +19,23 @@
       PUID: "1000"
       SUPERUSER_EMAIL: "{{ admin_email }}"
       SUPERUSER_PASSWORD: "{{ admin_password }}"
+      DB: "sqlite"
+      DB_NAME: "/config/hc.sqlite"
+      EMAIL_HOST: "{{ mail.server }}"
+      DEFAULT_FROM_EMAIL: "{{ machine_name }}@{{ mail.domain }}"
+      EMAIL_PORT: "{{ mail.port }}"
+      EMAIL_HOST_PASSWORD: "{{ mail.password }}"
+      EMAIL_HOST_USER: "{{ mail.user }}"
+      EMAIL_USE_TLS: "False"
+      EMAIL_USE_SSL: "True"
+      BASE_URL: "{{ traefik.url }}"
+      SITE_ROOT: "http://{{ traefik.url }}"
+      DEBUG: "False"
+      SITE_NAME: "{{ site_name | default('Healthchecks') }}"
+      ALLOWED_HOSTS: "{{ traefik.url }}"
+      CSRF_TRUSTED_ORIGINS: "http://{{ traefik.url }}"
+      PING_ENDPOINT: "http://{{ traefik.url }}/ping/"
+      REGISTRATION_OPEN: "False"
     labels:
       traefik.frontend.rule: "Host: {{ traefik.url }}"
       traefik.port: "8000"

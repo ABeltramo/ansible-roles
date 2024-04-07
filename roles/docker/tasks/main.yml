@@ -9,6 +9,15 @@
     tasks_from: debian-install
   when: '"docker-ce" not in ansible_facts.packages'
 
+- name: "Install docker-py (used by Ansible to run remote docker)"
+  apt:
+    name: [python3-docker]
+
+- name: "Create {{ DOCKER.host_path }} folder"
+  file:
+    path: "{{ DOCKER.host_path }}"
+    state: directory
+
 - name: "Start docker service if stopped"
   service:
     name: docker
