@@ -59,6 +59,7 @@ $CONFIG = array(
     'overwritewebroot'  => '/',
     'allow_local_remote_servers' => true,
     'localstorage.allowsymlinks' => true,
+    'maintenance_window_start' => 2,
 {% if mail is defined %}
     'mail_from_address' => '{{ mail.default_from | default('nextcloud') }}',
     'mail_smtpmode' => 'smtp',
