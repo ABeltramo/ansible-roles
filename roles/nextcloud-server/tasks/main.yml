@@ -28,8 +28,6 @@
   file:
     path: "{{ nextcloud_data }}/update-dir"
     state: directory
-    owner: "www-data"
-    group: "www-data"
 
 - name: "Check /var/www/nextcloud folder exists"
   stat:
@@ -87,4 +85,3 @@
 
 - name: "Install NGINX if missing"
   import_tasks: "nginx.yml"
-  when: '"nginx" not in ansible_facts.packages'
