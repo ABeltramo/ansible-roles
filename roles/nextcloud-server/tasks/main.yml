@@ -64,6 +64,13 @@
     job: "php -f /var/www/nextcloud/cron.php"
     user: "www-data"
 
+- name: "Set permissions on php sessions folder"
+  file:
+    path: /var/lib/php/sessions
+    owner: "www-data"
+    group: "www-data"
+    state: directory
+
 - name: "CRON: cleanup php sessions, fixes: https://github.com/nextcloud/server/issues/7628"
   cron:
     name: "cleanup php sessions"
