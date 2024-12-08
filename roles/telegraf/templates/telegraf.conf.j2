@@ -90,9 +90,8 @@
 
 # OUTPUTS
 [[outputs.influxdb]]
-  url = "http://{{ influxdb_host }}" # required.
+  urls = ["http://{{ influxdb_host }}"] # required.
   database = "{{ influxdb_db }}" # required.
-  precision = "s"
 
 
 ###############################################################################
