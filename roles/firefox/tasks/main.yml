@@ -1,0 +1,27 @@
+- name: Ensure firefox config folder exists
+  file:
+    path: "{{ DOCKER.host_path }}/firefox/"
+    recurse: yes
+    state: directory
+
+- community.docker.docker_container:
+    name: firefox
+    image: lscr.io/linuxserver/firefox
+    state: started
+    pull: true
+    recreate: yes
+    restart_policy: always
+    shm_size: 1GB
+    env:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: "Europe/London"
+    volumes:
+      - "{{ DOCKER.host_path }}/firefox:/config/"
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "3000"
+      traefik.enable: "true"
+    purge_networks: yes
