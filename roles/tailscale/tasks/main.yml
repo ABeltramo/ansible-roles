@@ -1,0 +1,24 @@
+- name: "Start Tailscale"
+  community.docker.docker_container:
+    name: tailscale-agent
+    image: tailscale/tailscale:latest
+    pull: true
+    state: started
+    recreate: yes
+    restart_policy: always
+    networks:
+      - name: host
+    purge_networks: no
+    env:
+      TS_AUTHKEY: "{{ tailscale_authkey }}"
+      TS_STATE_DIR: "/var/lib/tailscale"
+      TS_ROUTES: "{{ tailscale_routes | default(omit) }}"
+      TS_EXTRA_ARGS: "--advertise-exit-node"
+    volumes:
+      - "{{ DOCKER.host_path }}/tailscale:/var/lib/tailscale"
+      - /dev/net/tun:/dev/net/tun
+      - /var/lib:/var/lib
+    capabilities:
+      - NET_ADMIN
+      - SYS_MODULE
+      - NET_RAW
