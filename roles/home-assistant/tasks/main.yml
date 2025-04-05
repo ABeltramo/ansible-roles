@@ -1,0 +1,19 @@
+- name: Ensure host config folder exists
+  file:
+    path: "{{ DOCKER.host_path }}/home-assistant/"
+    recurse: yes
+    state: directory
+
+- community.docker.docker_container:
+    name: home-assistant
+    image: ghcr.io/home-assistant/home-assistant:stable
+    state: started
+    pull: true
+    recreate: yes
+    restart_policy: always
+    env:
+      TZ: "Europe/London"
+    volumes:
+      - "{{ DOCKER.host_path }}/home-assistant/:/config/"
+    network_mode: host
+    purge_networks: yes
