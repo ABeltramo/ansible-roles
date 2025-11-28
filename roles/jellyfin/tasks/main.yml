@@ -1,0 +1,36 @@
+- name: Create cache directory
+  file:
+    path: "{{ transcoding_folder }}/jelly-cache"
+    state: directory
+    mode: '0755'
+    owner: 1000
+    group: 1000
+  become: yes
+
+- community.docker.docker_container:
+    name: jellyfin
+    image: lscr.io/linuxserver/jellyfin:latest
+    pull: true
+    state: started
+    recreate: yes
+    restart_policy: always
+    ports:
+      - "7359:7359/udp"
+    env:
+      TZ: 'Europe/London'
+      PUID: "1000"
+      PGID: "1000"
+      JELLYFIN_PublishedServerUrl: "http://{{ traefik.url }}"
+    volumes:
+      - "{{ DOCKER.host_path }}/jellyfin/config:/config"
+      - "{{ transcoding_folder }}/jelly-cache:/cache"
+      - "{{ data_folder }}:/data:ro"
+    devices:
+      - /dev/dri:/dev/dri
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "8096"
+      traefik.enable: "true"
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+    purge_networks: yes
