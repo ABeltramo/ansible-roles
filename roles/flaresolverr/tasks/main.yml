@@ -1,0 +1,15 @@
+- community.docker.docker_container:
+    name: flaresolverr
+    image: ghcr.io/flaresolverr/flaresolverr
+    pull: true
+    state: started
+    restart_policy: always
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "8191"
+      traefik.enable: "true"
+    env:
+      TZ: "Europe/London"
+    purge_networks: yes
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"

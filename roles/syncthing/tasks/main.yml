@@ -1,0 +1,25 @@
+- community.docker.docker_container:
+    name: syncthing
+    image: lscr.io/linuxserver/syncthing:latest
+    pull: true
+    state: started
+    recreate: yes
+    restart_policy: always
+    ports:
+      - "22000:22000/tcp" # TCP file transfers
+      - "22000:22000/udp" # QUIC file transfers
+      - "21027:21027/udp" # Receive local discovery broadcasts
+    env:
+      TZ: 'Europe/London'
+      PUID: "1000"
+      PGID: "1000"
+    volumes:
+      - "{{ DOCKER.host_path }}/syncthing:/config"
+      - "{{ syncthing_root_folder }}:/share:rw"
+    labels:
+      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.port: "8384"
+      traefik.enable: "true"
+    networks:
+      - name: "{{ DOCKER.net.traefik }}"
+    purge_networks: yes
