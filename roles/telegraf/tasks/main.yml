@@ -15,9 +15,9 @@
     dest: "{{ telegraf_folder}}telegraf.conf"
 
 - name: Docker install
-  include: docker-install.yml
+  include_tasks: docker-install.yml
   when: '"docker-ce" in ansible_facts.packages'
 
 - name: System install
-  include: system-install.yml
+  include_tasks: system-install.yml
   when: '"docker-ce" not in ansible_facts.packages'

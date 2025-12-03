@@ -1,5 +1,5 @@
 - name: "Compose Guacamole"
-  docker_compose:
+  community.docker.docker_compose_v2:
     project_name: guacamole
     definition:
       version: "3"
