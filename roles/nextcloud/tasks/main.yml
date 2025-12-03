@@ -7,7 +7,7 @@
     src: nextcloud/config.php
     dest: "{{ nextcloud_config }}/config.php"
 
-- community.docker.docker_compose:
+- community.docker.docker_compose_v2:
     project_name: nextcloud
     recreate: always
     pull: yes
