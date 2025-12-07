@@ -23,7 +23,6 @@
     recreate: no
     restart_policy: always
     network_mode: "{{ DOCKER.net.traefik }}"
-    purge_networks: no
     container_default_behavior: "compatibility"
     volumes:
       - "{{ DOCKER.host_path }}/discord-sb/sounds:/app/sounds"

@@ -56,6 +56,5 @@
       VRKN_RADARR_1_GET_MISSING_RUN_SECONDS: "300"
     volumes:
       - "{{ DOCKER.host_path }}/varken:/config"
-    purge_networks: yes
     networks:
       - name: "{{ DOCKER.net.traefik }}"

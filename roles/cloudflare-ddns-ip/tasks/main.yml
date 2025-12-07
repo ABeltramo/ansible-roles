@@ -15,4 +15,3 @@
       HEALTHCHECK_START_URL: "{{ HEALTHCHECK.url + '/' + HEALTHCHECK.id + '/start' | default(omit) }}"
       HEALTHCHECK_END_URL: "{{ HEALTHCHECK.url + '/' + HEALTHCHECK.id | default(omit) }}"
     network_mode: "{{ DOCKER.net.traefik | default('bridge') }}"
-    purge_networks: no

@@ -9,6 +9,5 @@
       traefik.frontend.rule: "Host: {{ traefik.url }}"
       traefik.port: "8080"
       traefik.enable: "true"
-    purge_networks: yes
     networks:
       - name: "{{ DOCKER.net.traefik }}"

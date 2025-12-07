@@ -57,4 +57,3 @@
       traefik.frontend.rule: "HostRegexp:pi.hole,{catchall:.*}"
       traefik.frontend.priority: "1"
       traefik.port: "80"
-    purge_networks: yes

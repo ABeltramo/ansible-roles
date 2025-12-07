@@ -12,7 +12,6 @@
       TZ: 'Europe/London'
     networks:
       - name: "{{ DOCKER.net.traefik }}"
-    purge_networks: yes
     labels:
       traefik.frontend.rule: "Host: {{ traefik.url }}"
       traefik.port: "80"

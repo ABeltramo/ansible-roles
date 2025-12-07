@@ -21,7 +21,6 @@
     state: started
     recreate: no
     restart_policy: always
-    purge_networks: no
     container_default_behavior: "compatibility"
     ports:
       - "80:80"

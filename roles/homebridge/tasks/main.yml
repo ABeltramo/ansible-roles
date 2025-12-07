@@ -30,7 +30,6 @@
       traefik.enable: "true"
     networks:
       - name: "{{ DOCKER.net.traefik }}"
-    purge_networks: yes
 
 - name: "Start Homebridge"
   community.docker.docker_container:

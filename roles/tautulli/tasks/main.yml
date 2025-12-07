@@ -13,7 +13,6 @@
       PGID: "1000"
     volumes:
       - "{{ DOCKER.host_path }}/tautulli:/config"
-    purge_networks: yes
     labels:
       traefik.frontend.rule: "Host: {{ traefik.url }}"
       traefik.port: "8181"

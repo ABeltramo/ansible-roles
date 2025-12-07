@@ -27,7 +27,6 @@
       - "{{ DOCKER.host_path }}/cloudtube/configuration.py:/workdir/configuration.py"
     networks:
       - name: "{{ DOCKER.net.traefik }}"
-    purge_networks: yes
 
 - name: "Start cloudtube"
   community.docker.docker_container:
@@ -39,7 +38,6 @@
     restart_policy: always
     networks:
       - name: "{{ DOCKER.net.traefik }}"
-    purge_networks: yes
     volumes:
       - "{{ DOCKER.host_path }}/cloudtube/db:/workdir/db"
       - "{{ DOCKER.host_path }}/cloudtube/config.js:/workdir/config/config.js"

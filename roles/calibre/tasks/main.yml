@@ -19,7 +19,6 @@
       traefik.enable: "true"
     networks:
       - name: "{{ DOCKER.net.traefik }}"
-    purge_networks: yes
 
 #- community.docker.docker_container:
 #    name: calibre-web
@@ -39,6 +38,5 @@
 #      traefik.frontend.rule: "Host: {{ traefik.calibre_web_url }}"
 #      traefik.port: "8083"
 #      traefik.enable: "false"
-#    purge_networks: yes
 #    networks:
 #      - name: "{{ DOCKER.net.traefik }}"

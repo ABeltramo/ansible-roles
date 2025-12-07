@@ -16,4 +16,3 @@
     volumes:
       - "{{ DOCKER.host_path }}/home-assistant/:/config/"
     network_mode: host
-    purge_networks: yes

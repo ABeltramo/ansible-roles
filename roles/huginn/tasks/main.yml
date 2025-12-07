@@ -10,7 +10,6 @@
     networks:
       - name: "{{ DOCKER.net.traefik }}"
       - name: "{{ DOCKER.net.dbms }}"
-    purge_networks: yes
     env:
       MYSQL_PORT_3306_TCP_ADDR: mysql
       HUGINN_DATABASE_NAME: huginn

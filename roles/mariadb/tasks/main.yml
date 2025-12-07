@@ -15,7 +15,6 @@
       - "3306:3306"
     env:
       MYSQL_ROOT_PASSWORD: "{{ SQL.root_password }}"
-    purge_networks: yes
     networks:
       - name: "{{ DOCKER.net.dbms }}"
         aliases: [mysql]

@@ -10,4 +10,3 @@
       - "6379:6379"
     networks:
       - name: "{{ DOCKER.net.dbms }}"
-    purge_networks: yes

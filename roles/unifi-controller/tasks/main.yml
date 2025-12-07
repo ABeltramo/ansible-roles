@@ -28,4 +28,3 @@
       com.centurylinklabs.watchtower.enable: "false"
     networks:
       - name: "{{ DOCKER.net.traefik }}"
-    purge_networks: yes

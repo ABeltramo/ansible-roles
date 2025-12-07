@@ -35,6 +35,5 @@
       PGID: "1000"
       PUID: "1000"
       DELUGE_LOGLEVEL: info
-    purge_networks: yes
     networks:
       - name: "{{ DOCKER.net.traefik }}"

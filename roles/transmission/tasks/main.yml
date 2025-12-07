@@ -45,4 +45,3 @@
       PGID: "1000"
       PUID: "1000"
     network_mode: "container:nordVPN"
-    purge_networks: yes

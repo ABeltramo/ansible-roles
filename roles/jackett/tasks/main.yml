@@ -12,6 +12,5 @@
       traefik.enable: "true"
     env:
       TZ: "Europe/London"
-    purge_networks: yes
     networks:
       - name: "{{ DOCKER.net.traefik }}"

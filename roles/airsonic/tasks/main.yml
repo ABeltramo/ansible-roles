@@ -30,7 +30,6 @@
     networks:
       - name: "{{ DOCKER.net.traefik }}"
       - name: "{{ DOCKER.net.dbms }}"
-    purge_networks: yes
     labels:
       traefik.frontend.rule: "Host: {{ traefik.url }}"
       traefik.port: "4040"

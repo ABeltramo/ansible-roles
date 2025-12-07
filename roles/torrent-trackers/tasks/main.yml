@@ -20,7 +20,6 @@
       TZ: 'Europe/London'
       PGID: "1000"
       PUID: "1000"
-    purge_networks: yes
     networks:
       - name: "{{ DOCKER.net.traefik }}"
   when: traefik.sonarr_url is defined
@@ -47,7 +46,6 @@
       TZ: 'Europe/London'
       PGID: "1000"
       PUID: "1000"
-    purge_networks: yes
     networks:
       - name: "{{ DOCKER.net.traefik }}"
   when: traefik.radarr_url is defined
@@ -76,7 +74,6 @@
       TZ: 'Europe/London'
       PGID: "1000"
       PUID: "1000"
-    purge_networks: yes
     networks:
       - name: "{{ DOCKER.net.traefik }}"
   when: traefik.bazarr_url is defined
@@ -100,7 +97,6 @@
       PUID: "1000"
     ports:
       - 8080:8080
-    purge_networks: yes
     networks:
       - name: "{{ DOCKER.net.traefik }}"
   when: traefik.sabnzbd_url is defined
@@ -126,7 +122,6 @@
       TZ: 'Europe/London'
       PGID: "1000"
       PUID: "1000"
-    purge_networks: yes
     networks:
       - name: "{{ DOCKER.net.traefik }}"
   when: traefik.lidarr_url is defined

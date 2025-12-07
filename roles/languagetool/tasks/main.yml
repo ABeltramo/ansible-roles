@@ -29,4 +29,3 @@
       traefik.enable: "true"
     networks:
       - name: "{{ DOCKER.net.traefik }}"
-    purge_networks: yes

@@ -21,7 +21,6 @@
     state: started
     recreate: yes
     restart_policy: always
-    purge_networks: no
     container_default_behavior: "compatibility"
     env:
       ADMINER_DEFAULT_SERVER: "{{ SQL.host }}"
