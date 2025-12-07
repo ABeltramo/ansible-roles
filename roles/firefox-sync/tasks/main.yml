@@ -20,4 +20,3 @@
       traefik.frontend.rule: "Host: {{ traefik.url }}"
       traefik.port: "5000"
       traefik.enable: "true"
-    purge_networks: yes

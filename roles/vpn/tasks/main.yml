@@ -16,4 +16,3 @@
       VPN_PASSWORD: "{{ password }}"
       VPN_DNS_NAME: "{{ external_name }}"
     privileged: true
-    purge_networks: yes

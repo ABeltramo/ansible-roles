@@ -8,7 +8,6 @@
     restart_policy: always
     networks:
       - name: host
-    purge_networks: no
     env:
       TS_AUTHKEY: "{{ tailscale_authkey }}"
       TS_STATE_DIR: "/var/lib/tailscale"

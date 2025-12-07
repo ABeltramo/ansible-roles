@@ -19,4 +19,3 @@
     networks:
       - name: "{{ DOCKER.net.traefik }}"
       - name: "{{ DOCKER.net.dbms }}"
-    purge_networks: yes

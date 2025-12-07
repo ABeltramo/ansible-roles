@@ -25,4 +25,3 @@
       - "{{ DOCKER.host_path }}/docker-registry/config.yml:/etc/docker/registry/config.yml"
     networks:
       - name: "{{ DOCKER.net.traefik }}"
-    purge_networks: yes

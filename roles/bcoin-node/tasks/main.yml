@@ -38,4 +38,3 @@
       BCOIN_PREFIX: "/data"
     networks:
       - name: "{{ DOCKER.net.traefik }}"
-    purge_networks: yes

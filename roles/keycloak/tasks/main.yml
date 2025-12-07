@@ -15,7 +15,6 @@
       PROXY_ADDRESS_FORWARDING: "true"
       KEYCLOAK_USER: "{{ admin_user }}"
       KEYCLOAK_PASSWORD: "{{ admin_password }}"
-    purge_networks: yes
     networks:
       - name: "{{ DOCKER.net.dbms }}"
       - name: "{{ DOCKER.net.traefik }}"
