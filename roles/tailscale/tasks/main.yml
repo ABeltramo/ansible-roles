@@ -9,6 +9,7 @@
     networks:
       - name: host
     env:
+      TS_AUTH_ONCE: "true"
       TS_AUTHKEY: "{{ tailscale_authkey }}"
       TS_STATE_DIR: "/var/lib/tailscale"
       TS_ROUTES: "{{ tailscale_routes | default(omit) }}"
