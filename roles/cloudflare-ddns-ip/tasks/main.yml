@@ -12,6 +12,6 @@
       AUTH_KEY: "{{ cloudflare.auth_key }}"
       ZONE_IDENTIFIER: "{{ cloudflare.zone_identifier }}"
       RECORD_NAME: "{{ external_domain_name }}"
-      HEALTHCHECK_START_URL: "{{ HEALTHCHECK.url + '/' + HEALTHCHECK.id + '/start' | default(omit) }}"
-      HEALTHCHECK_END_URL: "{{ HEALTHCHECK.url + '/' + HEALTHCHECK.id | default(omit) }}"
+      HEALTHCHECK_START_URL: "{{ HEALTHCHECK.url + '/' + HEALTHCHECK.id + '/start' if HEALTHCHECK is defined else omit }}"
+      HEALTHCHECK_END_URL: "{{ HEALTHCHECK.url + '/' + HEALTHCHECK.id if HEALTHCHECK is defined else omit }}"
     network_mode: "{{ DOCKER.net.traefik | default('bridge') }}"

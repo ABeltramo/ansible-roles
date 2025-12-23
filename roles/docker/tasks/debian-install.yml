@@ -1,26 +1,30 @@
 - name: "Install Docker dependencies"
   apt:
-    name: [apt-transport-https, ca-certificates, curl, gnupg2, software-properties-common]
+    name: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
     update_cache: yes
 
-- name: "Add Docker's public PGP key to the APT keyring"
-  apt_key:
-    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
-    url: https://download.docker.com/linux/debian/gpg
 
-- name: Get DEB architecture
-  shell: dpkg --print-architecture
-  register: deb_architecture
+- name: Add Docker GPG apt key
+  ansible.builtin.shell: |
+    curl -fsSL https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  args:
+    creates: /etc/apt/keyrings/docker.gpg
+
+- name: Set correct permissions for Docker GPG key
+  ansible.builtin.file:
+    path: /etc/apt/keyrings/docker.gpg
+    mode: '0644'
 
 - name: "Configure Docker's upstream APT repository"
   apt_repository:
-    repo: deb [arch={{ deb_architecture.stdout }}] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable
+    repo: "deb [signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
     state: present
+    filename: docker
     update_cache: true
 
 - name: "Install Docker"
   apt:
-    name: [docker-ce, docker-ce-cli, containerd.io]
+    name: [docker-ce, docker-ce-cli, containerd.io, docker-buildx-plugin, docker-compose-plugin]
     update_cache: yes
 
 - name: "Install python-pip"
