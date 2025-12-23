@@ -20,6 +20,6 @@
       - /var/run/docker.sock:/var/run/docker.sock
     network_mode: "{{ DOCKER.net.traefik | default('bridge') }}"
     labels:
-      traefik.frontend.rule: "Host: {{ traefik.url }}"
+      traefik.frontend.rule: "Host: {{ traefik.url | default(omit) }}"
       traefik.port: "9000"
       traefik.enable: "true"
