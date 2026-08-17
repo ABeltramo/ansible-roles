@@ -13,6 +13,12 @@
   apt:
     name: [python3-docker]
 
+- name: Configure Docker daemon
+  copy:
+    dest: /etc/docker/daemon.json
+    content: "{{ docker_daemon_config | default({'log-driver': 'journald'}) | to_nice_json }}"
+  notify: restart docker
+
 - name: "Create {{ DOCKER.host_path }} folder"
   file:
     path: "{{ DOCKER.host_path }}"

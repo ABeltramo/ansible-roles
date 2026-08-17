@@ -1,0 +1,10 @@
+---
+sdcard_swappiness: 1
+sdcard_vfs_cache_pressure: 50
+sdcard_commit_interval: 600
+
+sdcard_tmpfs_tmp_size: "100M"
+sdcard_tmpfs_var_tmp_size: "50M"
+
+sdcard_journald_volatile: true
+sdcard_journald_max_use: "30M"
