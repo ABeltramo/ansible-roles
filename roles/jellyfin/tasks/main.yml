@@ -9,7 +9,7 @@
 
 - community.docker.docker_container:
     name: jellyfin
-    image: lscr.io/linuxserver/jellyfin:latest
+    image: "{{ jellyfin_image | default('lscr.io/linuxserver/jellyfin:latest') }}"
     pull: true
     state: started
     recreate: yes
