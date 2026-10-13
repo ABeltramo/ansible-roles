@@ -10,11 +10,7 @@ ENV SHINOBI_BRANCH="master"
 # PLUGINKEY_OPENCV : opencv plugin connection key
 # PLUGINKEY_OPENALPR : openalpr plugin connection key
 ENV ADMIN_USER=admin@shinobi.video \
-    ADMIN_PASSWORD=admin \
-    CRON_KEY=[REMOVED] \
-    PLUGINKEY_MOTION=[REMOVED] \
-    PLUGINKEY_OPENCV=[REMOVED] \
-    PLUGINKEY_OPENALPR=[REMOVED]
+    ADMIN_PASSWORD=admin
 
 
 

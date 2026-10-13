@@ -21,12 +21,12 @@
     }
   },
   "cron": {
-    "key": "[REMOVED]"
+    "key": ""
   },
   "pluginKeys": {
-    "Motion": "[REMOVED]",
-    "OpenCV": "[REMOVED]",
-    "OpenALPR": "[REMOVED]"
+    "Motion": "",
+    "OpenCV": "",
+    "OpenALPR": ""
   },
   "productType": "CE"
 }

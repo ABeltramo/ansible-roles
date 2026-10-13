@@ -36,12 +36,24 @@ mysqladmin ping -h"$MYSQL_HOST" -u"$MYSQL_USER" --password="$MYSQL_PASSWORD" --w
 echo "Create database schema if it does not exists ..."
 mysql -u $MYSQL_USER -h $MYSQL_HOST --password="$MYSQL_PASSWORD" -e "source /opt/shinobi/sql/framework.sql" $MYSQL_DATABASE || true
 
-echo "Set keys for CRON and PLUGINS from environment variables ..."
-sed -i -e 's/"key":"[REMOVED]"/"key":"'"${CRON_KEY}"'"/g' \
-       -e 's/"Motion":"[REMOVED]"/"Motion":"'"${PLUGINKEY_MOTION}"'"/g' \
-       -e 's/"OpenCV":"[REMOVED]"/"OpenCV":"'"${PLUGINKEY_OPENCV}"'"/g' \
-       -e 's/"OpenALPR":"[REMOVED]"/"OpenALPR":"'"${PLUGINKEY_OPENALPR}"'"/g' \
-       "/opt/shinobi/conf.json"
+echo "Set CRON and plugin keys ..."
+node <<'NODE'
+const fs = require("fs");
+const crypto = require("crypto");
+const confPath = "/opt/shinobi/conf.json";
+const config = JSON.parse(fs.readFileSync(confPath, "utf8"));
+const resolveKey = (name, current) =>
+    process.env[name] || current || crypto.randomBytes(16).toString("hex");
+
+config.cron = config.cron || {};
+config.pluginKeys = config.pluginKeys || {};
+config.cron.key = resolveKey("CRON_KEY", config.cron.key);
+config.pluginKeys.Motion = resolveKey("PLUGINKEY_MOTION", config.pluginKeys.Motion);
+config.pluginKeys.OpenCV = resolveKey("PLUGINKEY_OPENCV", config.pluginKeys.OpenCV);
+config.pluginKeys.OpenALPR = resolveKey("PLUGINKEY_OPENALPR", config.pluginKeys.OpenALPR);
+
+fs.writeFileSync(confPath, JSON.stringify(config, null, 2) + "\n");
+NODE
 
 # Set the admin password
 if [ -n "${ADMIN_USER}" ]; then
