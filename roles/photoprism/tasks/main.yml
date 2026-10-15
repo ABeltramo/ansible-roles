@@ -49,7 +49,3 @@
     security_opts:
       - seccomp:unconfined
       - apparmor:unconfined
-    labels:
-      traefik.frontend.rule: "Host: {{ traefik.url }}"
-      traefik.port: "2342"
-      traefik.enable: "true"

@@ -34,7 +34,3 @@
       - name: "{{ DOCKER.net.traefik }}"
     volumes:
       - "{{ DOCKER.host_path }}/intellij-projector/projects:/projects"
-    labels:
-      traefik.frontend.rule: "Host: {{ traefik.url }}"
-      traefik.port: "8887"
-      traefik.enable: "true"

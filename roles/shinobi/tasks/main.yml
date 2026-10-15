@@ -54,10 +54,6 @@
       MYSQL_PASSWORD: "{{ sql_password }}"
       MYSQL_DATABASE: "{{ sql_db }}"
       MYSQL_HOST: "{{ sql_host }}"
-    labels:
-      traefik.frontend.rule: "Host: {{ traefik.url }}"
-      traefik.port: "8080"
-      traefik.enable: "true"
     networks:
       - name: "{{ DOCKER.net.traefik }}"
       - name: "{{ DOCKER.net.dbms }}"

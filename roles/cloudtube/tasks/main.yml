@@ -41,7 +41,4 @@
     volumes:
       - "{{ DOCKER.host_path }}/cloudtube/db:/workdir/db"
       - "{{ DOCKER.host_path }}/cloudtube/config.js:/workdir/config/config.js"
-    labels:
-      traefik.frontend.rule: "Host: {{ traefik.url }}"
-      traefik.port: "10412"
-      traefik.enable: "true"
+    

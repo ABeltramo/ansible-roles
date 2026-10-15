@@ -21,7 +21,3 @@
       - name: "{{ DOCKER.net.traefik }}"
     volumes:
       - "{{ DOCKER.host_path }}/alltube/config.yml:/var/www/html/config/config.yml"
-    labels:
-      traefik.frontend.rule: "Host: {{ traefik.url }}"
-      traefik.port: "80"
-      traefik.enable: "true"

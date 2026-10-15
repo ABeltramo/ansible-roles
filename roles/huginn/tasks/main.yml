@@ -15,7 +15,3 @@
       HUGINN_DATABASE_NAME: huginn
       HUGINN_DATABASE_USERNAME: huginn
       HUGINN_DATABASE_PASSWORD: huginn
-    labels:
-      traefik.frontend.rule: "Host: {{ traefik.url }}"
-      traefik.port: "3000"
-      traefik.enable: "true"

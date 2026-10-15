@@ -36,10 +36,6 @@
       CSRF_TRUSTED_ORIGINS: "http://{{ traefik.url }}{% for h in healthchecks_extra_hosts | default([]) %},https://{{ h }}{% endfor %}"
       PING_ENDPOINT: "http://{{ traefik.url }}/ping/"
       REGISTRATION_OPEN: "False"
-    labels:
-      traefik.frontend.rule: "Host: {{ traefik.url }}"
-      traefik.port: "8000"
-      traefik.enable: "true"
     networks:
       - name: "{{ DOCKER.net.traefik }}"
       - name: "{{ DOCKER.net.dbms }}"

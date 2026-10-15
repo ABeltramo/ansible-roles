@@ -6,10 +6,6 @@
     restart_policy: always
     volumes:
       - "{{ DOCKER.host_path }}/jackett/config:/config"
-    labels:
-      traefik.frontend.rule: "Host: {{ traefik.url }}"
-      traefik.port: "9117"
-      traefik.enable: "true"
     env:
       TZ: "Europe/London"
     networks:

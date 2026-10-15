@@ -26,10 +26,6 @@
       ADMINER_DEFAULT_SERVER: "{{ SQL.host }}"
     volumes:
       - "{{ DOCKER.host_path }}/adminer/hydra/adminer.css:/var/www/html/adminer.css"
-    labels:
-      traefik.frontend.rule: "Host: {{ traefik.url }}"
-      traefik.port: "8080"
-      traefik.enable: "true"
     networks:
       - name: "{{ DOCKER.net.traefik }}"
       - name: "{{ DOCKER.net.dbms }}"

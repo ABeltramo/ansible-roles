@@ -29,10 +29,6 @@
       - "8333:8333"
     volumes:
       - "{{ DOCKER.host_path }}/bcoin:/data"
-    labels:
-      traefik.frontend.rule: "Host: {{ traefik.url }}"
-      traefik.port: "8332"
-      traefik.enable: "true"
     env:
       BCOIN_NETWORK: "main"
       BCOIN_PREFIX: "/data"

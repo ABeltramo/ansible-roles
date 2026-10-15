@@ -27,9 +27,5 @@
       - "{{ data_folder }}:/data:ro"
     devices:
       - /dev/dri:/dev/dri
-    labels:
-      traefik.frontend.rule: "Host: {{ traefik.url }}"
-      traefik.port: "8096"
-      traefik.enable: "true"
     networks:
       - name: "{{ DOCKER.net.traefik }}"

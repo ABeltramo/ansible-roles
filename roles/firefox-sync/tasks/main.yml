@@ -16,7 +16,3 @@
     networks:
       - name: "{{ DOCKER.net.dbms }}"
       - name: "{{ DOCKER.net.traefik }}"
-    labels:
-      traefik.frontend.rule: "Host: {{ traefik.url }}"
-      traefik.port: "5000"
-      traefik.enable: "true"

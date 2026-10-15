@@ -13,10 +13,6 @@
       TZ: "Europe/London"
       PGID: "0"
       PUID: "0"
-    labels:
-      traefik.frontend.rule: "Host: {{ traefik.calibre_url }}"
-      traefik.port: "8080"
-      traefik.enable: "true"
     networks:
       - name: "{{ DOCKER.net.traefik }}"
 
@@ -34,9 +30,5 @@
 #    env:
 #      TZ: "Europe/London"
 #      DOCKER_MODS: "linuxserver/calibre-web:calibre"
-#    labels:
-#      traefik.frontend.rule: "Host: {{ traefik.calibre_web_url }}"
-#      traefik.port: "8083"
-#      traefik.enable: "false"
 #    networks:
 #      - name: "{{ DOCKER.net.traefik }}"

@@ -35,11 +35,6 @@
     volumes:
       - "{{ DOCKER.host_path }}/transmission/config:/config"
       - "{{ media_folder }}/torrent:/downloads"
-    labels:
-      traefik.backed: "nordVPN"
-      traefik.frontend.rule: "Host: {{ traefik.url }}"
-      traefik.port: "9091"
-      traefik.enable: "true"
     env:
       TZ: 'Europe/London'
       PGID: "1000"
