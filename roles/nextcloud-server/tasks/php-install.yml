@@ -38,6 +38,7 @@
 #      - "php{{ php_version }}-json " # Removed as a module from 8.0
       - "php{{ php_version }}-imagick"
       - "php{{ php_version }}-apcu"
+      - "php{{ php_version }}-igbinary"
       - imagemagick
       - imagemagick-common
       - ffmpeg
