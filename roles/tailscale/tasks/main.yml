@@ -14,6 +14,10 @@
       TS_STATE_DIR: "/var/lib/tailscale"
       TS_ROUTES: "{{ tailscale_routes | default(omit) }}"
       TS_EXTRA_ARGS: "--advertise-exit-node"
+      # Fixed UDP port for direct (non-DERP) peer connections. Set
+      # `tailscale_port` in host_vars when a WAN port-forward targets this
+      # host; omit it to keep the automatic port selection.
+      TS_TAILSCALED_EXTRA_ARGS: "{{ '--port=' ~ tailscale_port if tailscale_port is defined else '' }}"
     volumes:
       - "{{ DOCKER.host_path }}/tailscale:/var/lib/tailscale"
       - /dev/net/tun:/dev/net/tun
